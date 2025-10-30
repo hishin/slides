@@ -1,0 +1,1757 @@
+/* Adobe Spectrum Design Tokens */
+:root {
+    /* Spectrum Color Palette */
+    --spectrum-blue-100: #e0f2ff;
+    --spectrum-blue-200: #cae8ff;
+    --spectrum-blue-300: #b3deff;
+    --spectrum-blue-400: #96cefd;
+    --spectrum-blue-500: #2680EB;
+    --spectrum-blue-600: #1473E6;
+    --spectrum-blue-700: #0D66D0;
+    
+    --spectrum-gray-50: #FFFFFF;
+    --spectrum-gray-75: #FAFAFA;
+    --spectrum-gray-100: #F5F5F5;
+    --spectrum-gray-200: #E1E1E1;
+    --spectrum-gray-300: #CACACA;
+    --spectrum-gray-400: #B3B3B3;
+    --spectrum-gray-500: #909090;
+    --spectrum-gray-600: #6E6E6E;
+    --spectrum-gray-700: #464646;
+    --spectrum-gray-800: #2C2C2C;
+    --spectrum-gray-900: #1A1A1A;
+    
+    --spectrum-orange-100: #FFF2E1;
+    --spectrum-orange-200: #FFE0B3;
+    --spectrum-orange-300: #FFCA80;
+    --spectrum-orange-400: #FFB340;
+    --spectrum-orange-500: #FF9A00;
+    --spectrum-orange-600: #E87700;
+    --spectrum-orange-700: #CB6500;
+    --spectrum-orange-800: #AA5000;
+    --spectrum-orange-900: #8D3F00;
+    
+    --spectrum-red-100: #FFE8E8;
+    --spectrum-red-200: #FFC9C9;
+    --spectrum-red-300: #FFA8A8;
+    --spectrum-red-400: #FF8585;
+    --spectrum-red-500: #FF5C5C;
+    --spectrum-red-600: #E03535;
+    --spectrum-red-700: #C41F1F;
+    --spectrum-red-800: #A41010;
+    --spectrum-red-900: #850A0A;
+    
+    --spectrum-green-100: #D5F2DD;
+    --spectrum-green-200: #ADE5BB;
+    --spectrum-green-300: #82D99A;
+    --spectrum-green-400: #53CC7A;
+    --spectrum-green-500: #2AB759;
+    --spectrum-green-600: #1F9E4F;
+    --spectrum-green-700: #168644;
+    --spectrum-green-800: #0D6E39;
+    --spectrum-green-900: #06582E;
+    
+    /* Spectrum Typography Scale */
+    --spectrum-font-size-50: 13px;
+    --spectrum-font-size-75: 14px;
+    --spectrum-font-size-100: 16px;
+    --spectrum-font-size-200: 18px;
+    --spectrum-font-size-300: 21px;
+    --spectrum-font-size-400: 24px;
+    --spectrum-font-size-500: 26px;
+    --spectrum-font-size-600: 30px;
+    --spectrum-font-size-700: 34px;
+    --spectrum-font-size-800: 38px;
+    --spectrum-font-size-900: 43px;
+    --spectrum-font-size-1000: 48px;
+    --spectrum-font-size-1100: 54px;
+    --spectrum-font-size-1200: 60px;
+    --spectrum-font-size-1300: 72px;
+    
+    /* Spectrum Spacing Scale */
+    --spectrum-spacing-50: 2px;
+    --spectrum-spacing-75: 4px;
+    --spectrum-spacing-100: 8px;
+    --spectrum-spacing-200: 12px;
+    --spectrum-spacing-300: 16px;
+    --spectrum-spacing-400: 24px;
+    --spectrum-spacing-500: 32px;
+    --spectrum-spacing-600: 40px;
+    --spectrum-spacing-700: 48px;
+    --spectrum-spacing-800: 64px;
+    
+    /* Spectrum Border Radius */
+    --spectrum-corner-radius-75: 2px;
+    --spectrum-corner-radius-100: 4px;
+    --spectrum-corner-radius-200: 8px;
+}
+
+/* Light Mode Theme (Default) */
+:root, [data-theme="light"] {
+    /* Simplified 3-color semantic system */
+    --color-heading: var(--spectrum-blue-500);      /* Main headings */
+    --color-subheading: var(--spectrum-gray-800);   /* Subheadings - dark gray for contrast */
+    --color-emphasis: var(--spectrum-blue-600);     /* Emphasis/highlights - blue for colored emphasis */
+    --color-neutral: var(--spectrum-gray-600);      /* Body text */
+    --color-neutral-dark: var(--spectrum-gray-800); /* Dark text */
+    
+    /* Updated primary variables using simplified system */
+    --primary: var(--color-heading);
+    --secondary: var(--color-emphasis);
+    --text: var(--color-neutral-dark);
+    --bg: var(--spectrum-gray-75);
+    --light: var(--spectrum-gray-50);
+    --dark: var(--spectrum-gray-50);
+    --slide-bg-start: var(--spectrum-gray-200);
+    --slide-bg-end: var(--spectrum-gray-50);
+    --border-color: var(--spectrum-gray-200);
+    --card-bg: var(--spectrum-gray-50);
+    --code-bg: var(--spectrum-gray-100);
+    --code-border: var(--spectrum-gray-200);
+    
+    /* Slide 1 gradient colors */
+    --slide1-gradient-start: var(--spectrum-blue-300);
+    --slide1-gradient-end: var(--spectrum-blue-700);
+}
+
+/* Dark Mode Theme */
+[data-theme="dark"] {
+    /* Dark mode semantic colors */
+    --color-heading: var(--spectrum-orange-600);      /* Lighter blue for headings */
+    --color-subheading: var(--spectrum-gray-200);   /* Light gray for subheadings */
+    --color-emphasis: var(--spectrum-orange-500);   /* Emphasis text - orange for colored emphasis */
+    --color-neutral: var(--spectrum-gray-400);      /* Body text */
+    --color-neutral-dark: var(--spectrum-gray-200); /* Dark text becomes light */
+    
+    /* Dark mode primary variables */
+    --primary: var(--color-heading);
+    --secondary: var(--color-emphasis);
+    --text: var(--color-neutral-dark);
+    --bg: var(--spectrum-gray-900);
+    --light: var(--spectrum-gray-800);
+    --dark: var(--spectrum-gray-800);
+    --slide-bg-start: var(--spectrum-gray-900);
+    --slide-bg-end: var(--spectrum-gray-700);
+    --border-color: var(--spectrum-gray-700);
+    --card-bg: var(--spectrum-gray-800);
+    --code-bg: var(--spectrum-gray-800);
+    --code-border: var(--spectrum-gray-700);
+    
+    /* Slide 1 gradient colors - Orange theme for dark mode */
+    --slide1-gradient-start: var(--spectrum-orange-300);
+    --slide1-gradient-end: var(--spectrum-orange-700);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Smooth transitions for theme changes */
+body, .slide, .card, .theme-toggle, pre, code,
+[style*="background"] {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Fiona Font Stack (fallback to system fonts) */
+body, html {
+    font-family: "urw-form", sans-serif;
+    height: 100%;
+    overflow: hidden;
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+}
+
+.presentation {
+    height: 100vh;
+    width: 100vw;
+    position: relative;
+}
+
+/* Spectrum-inspired slide backgrounds */
+.slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    z-index: 1;
+    background: linear-gradient(135deg, var(--slide-bg-start) 0%, var(--slide-bg-end) 100%);
+    border: 1px solid var(--border-color);
+}
+
+.slide.active {
+    opacity: 1;
+    z-index: 2;
+}
+
+.slide-content {
+    max-width: 90%;
+    width: 100%;
+    text-align: center;
+    margin: 0 auto;
+}
+
+/* Spectrum-inspired typography hierarchy */
+h1 {
+    font-size: var(--spectrum-font-size-1300);
+    font-weight: 500;
+    margin-bottom: var(--spectrum-spacing-600);
+    color: var(--primary);
+    letter-spacing: -0.025em;
+}
+
+h2 {
+    font-size: var(--spectrum-font-size-1100);
+    font-weight: 500;
+    margin-bottom: var(--spectrum-spacing-500);
+    color: var(--primary);
+    letter-spacing: -0.02em;
+}
+
+h3 {
+    font-size: var(--spectrum-font-size-800);
+    font-weight: 500;
+    margin-bottom: var(--spectrum-spacing-400);
+    color: var(--color-subheading);
+}
+
+h4 {
+    font-size: var(--spectrum-font-size-600);
+    font-weight: 500;
+    margin-bottom: var(--spectrum-spacing-300);
+    color: var(--color-subheading);
+}
+
+p {
+    font-size: var(--spectrum-font-size-400);
+    margin-bottom: var(--spectrum-spacing-400);
+    line-height: 1.6;
+    color: var(--text);
+}
+
+em {
+    color: var(--secondary);
+    font-style: italic;
+}
+
+/* Spectrum-style buttons */
+.btn {
+    padding: var(--spectrum-spacing-200) var(--spectrum-spacing-500);
+    background-color: var(--spectrum-blue-600);
+    color: var(--spectrum-gray-50);
+    border: none;
+    border-radius: var(--spectrum-corner-radius-100);
+    font-size: var(--spectrum-font-size-200);
+    font-weight: 600;
+    cursor: pointer;
+    margin: var(--spectrum-spacing-200);
+    transition: all 0.13s ease-in-out;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    text-transform: none;
+}
+
+.btn:hover {
+    background-color: var(--spectrum-blue-700);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.btn:focus {
+    outline: 2px solid var(--spectrum-blue-400);
+    outline-offset: 2px;
+}
+
+.navigation {
+    position: fixed;
+    bottom: 2rem;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    z-index: 10;
+}
+
+.nav-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: rgba(42, 59, 144, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.nav-dot.active {
+    background-color: var(--primary);
+    transform: scale(1.2);
+}
+
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 2.5rem;
+    width: 90%;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Spectrum-style cards */
+.card {
+    background-color: var(--card-bg);
+    padding: var(--spectrum-spacing-600);
+    border-radius: var(--spectrum-corner-radius-200);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--border-color);
+    flex: 1;
+    min-width: 250px;
+    max-width: 350px;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border-top: 3px solid var(--secondary);
+}
+
+.card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.card.visible {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* Flip card styles */
+.flip-card {
+    background-color: transparent;
+    perspective: 1000px;
+    height: 250px;
+    flex: 1;
+    min-width: 250px;
+    max-width: 350px;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.5s ease;
+    cursor: pointer;
+}
+
+.flip-card.visible {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.flip-card.flipped .flip-card-inner {
+    transform: rotateY(180deg);
+}
+
+.flip-card-front, .flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    border-radius: 12px;
+    background-color: var(--light);
+    border-top: 4px solid var(--secondary);
+}
+
+.flip-card-front {
+    color: var(--primary);
+}
+
+.flip-card-back {
+    transform: rotateY(180deg);
+}
+
+/* Large flip card for slide 11 - image only style */
+.large-flip-card {
+    min-width: 600px;
+    max-width: 800px;
+    height: 400px;
+    width: 80%;
+    background-color: transparent;
+}
+
+.large-flip-card .flip-card-inner {
+    height: 100%;
+    box-shadow: none;
+    border-radius: 0;
+}
+
+.large-flip-card .flip-card-front, 
+.large-flip-card .flip-card-back {
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.large-flip-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.poll-container {
+    width: 100%;
+    max-width: 600px;
+    margin-top: 2rem;
+}
+
+.poll-option {
+    display: flex;
+    margin-bottom: 1rem;
+    background-color: var(--light);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    height: 50px;
+    cursor: pointer;
+}
+
+.poll-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background-color: rgba(42, 59, 144, 0.3);
+    width: 0%;
+    transition: width 1s ease-in-out;
+    z-index: 1;
+}
+
+.poll-text {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0 1rem;
+    font-size: 1.3rem;
+}
+
+.progress-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background-color: rgba(0,0,0,0.1);
+    z-index: 10;
+}
+
+[data-theme="dark"] .progress-container {
+    background-color: rgba(255,255,255,0.1);
+}
+
+/* Spectrum-style progress bar */
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--slide1-gradient-start), var(--slide1-gradient-end));    width: 0%;
+    transition: width 0.3s ease;
+}
+
+/* Added classes for previously inline styles */
+.slide-subtitle {
+    font-size: var(--spectrum-font-size-500);
+    margin-bottom: 1rem;
+}
+
+.centered-container {
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.custom-flip-card {
+    margin: 15px;
+    width: 300px;
+    max-width: 100%;
+    flex: 0 0 auto;
+}
+
+.flip-card-title {
+    font-size: var(--spectrum-font-size-300);
+    margin: 10px 0;
+}
+
+.flip-icon {
+    width: 60px;
+    height: 60px;
+    margin: 15px 0;
+}
+
+.audio-player {
+    width: 100%;
+    margin: 15px 0;
+}
+
+/* Research slide styles */
+.research-title {
+    color: var(--primary);
+    font-size: var(--spectrum-font-size-800);
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.image-container {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+    justify-content: center;
+    margin: 10px 0;
+}
+
+.image-container.wide-gap {
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.image-flex {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.research-image {
+    max-width: 100%;
+    max-height: 400px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.research-image.large {
+    max-height: 450px;
+    margin: 20px 0;
+}
+
+.image-caption {
+    font-size: var(--spectrum-font-size-300);
+    margin-top: 8px;
+    text-align: center;
+    color: var(--text);
+    opacity: 0.8;
+}
+
+.italic-text {
+    font-style: italic;
+}
+
+/* Fixed positioning for research opportunities slides */
+.research-slide-header {
+    position: absolute;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    text-align: center;
+    z-index: 10;
+}
+
+.research-slide-header .research-title {
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.research-slide-header p {
+    margin-bottom: 0;
+}
+
+/* Adjust slide content to account for fixed header */
+.slide-content.with-fixed-header {
+    padding-top: 180px;
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 3rem;
+    }
+    h2 {
+        font-size: 2.5rem;
+    }
+    p {
+        font-size: 1.4rem;
+    }
+    .card-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .card {
+        width: 100%;
+        max-width: 100%;
+    }
+    .custom-flip-card {
+        width: 90%;
+        max-width: 350px;
+    }
+}
+
+@media (max-width: 1000px) {
+    .custom-flip-card {
+        width: 280px;
+    }
+}
+
+/* Clickable words in slide 2 */
+.clickable {
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+    text-decoration: underline dotted;
+    text-underline-offset: 5px;
+}
+
+.clickable:hover {
+    transform: scale(1.05);
+}
+
+/* Example container visible by default */
+.example-container {
+    max-width: 90%;
+    margin: 0 auto;
+    display: flex; /* Changed from block to flex */
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    position: relative;
+    z-index: 1;
+}
+
+/* Keep the visible class for consistency */
+.example-container.visible {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Container for both example sets to maintain layout */
+.examples-wrapper {
+    position: relative;
+    width: 100%;
+    margin-top: 0;
+}
+
+.example-item {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    width: 220px;
+    text-align: center;
+    border-top: 3px solid var(--secondary);
+}
+
+.example-item img {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    margin-bottom: 15px;
+}
+
+.example-item h4 {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+    color: var(--primary);
+}
+
+.example-item p {
+    font-size: 1rem;
+    margin-bottom: 0;
+}
+
+/* Navigation arrows */
+.nav-arrows {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+}
+
+/* Spectrum-style navigation arrows with SVG icons - circular design */
+.arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--spectrum-gray-50);
+    border: 1px solid var(--spectrum-gray-300);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.13s ease-in-out;
+    pointer-events: auto;
+    color: var(--spectrum-gray-700);
+    text-decoration: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.arrow:hover {
+    background-color: var(--spectrum-gray-100);
+    border-color: var(--spectrum-gray-400);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    color: var(--spectrum-gray-800);
+}
+
+.arrow:focus {
+    outline: 2px solid var(--spectrum-blue-400);
+    outline-offset: 2px;
+}
+
+.arrow svg {
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+    transition: stroke 0.13s ease-in-out;
+}
+
+.arrow.prev {
+    left: 20px;
+}
+
+.arrow.next {
+    right: 20px;
+}
+
+/* Adobe TV video styles */
+.video-container {
+    width: 90%;
+    max-width: 900px;
+    margin: 0 auto;
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    position: relative;
+    z-index: 1;
+}
+
+.video-container.visible {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.adobetv {
+    width: 100%;
+    height: 500px;
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Custom positioning for slide 2 and 3 */
+#slide2 .slide-content,
+#slide3 .slide-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    padding-bottom: 100px; /* Create space to offset the navigation dots */
+}
+
+#slide2 p,
+#slide3 p {
+    margin-bottom: 30px; /* Reduced space between text and video */
+}
+
+/* Citation style */
+.citation {
+    font-size: 0.9rem;
+    text-align: right;
+    margin-top: 8px;
+    opacity: 0.8;
+    font-style: italic;
+}
+
+.citation a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.citation a:hover {
+    text-decoration: underline;
+}
+
+/* Attribution styling */
+.attribution {
+    font-size: 0.7rem;
+    text-align: center;
+    margin-top: 20px;
+    opacity: 0.6;
+}
+
+.attribution a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.attribution a:hover {
+    text-decoration: underline;
+}
+
+/* Image zoom modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.9);
+    transition: 0.3s;
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    margin: auto;
+    display: block;
+    max-width: 90%;
+    max-height: 90vh;
+    margin-top: 2%;
+}
+
+.modal-close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 101;
+}
+
+.carousel-container {
+    position: relative;
+    width: 95%;
+    max-width: 1400px;
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.carousel-slide {
+    display: none; /* Hide by default */
+    text-align: center;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+.carousel-slide.active {
+    display: flex; /* Only show active slide as flex */
+}
+
+.carousel-image {
+    max-width: 90%;
+    max-height: 85vh;
+    min-height: 500px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+    object-fit: contain;
+}
+
+.carousel-caption {
+    margin-top: 20px;
+    color: white;
+    font-size: 1.5rem;
+    max-width: 100%;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-bottom: 50px;
+}
+
+.carousel-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2.5rem;
+    color: white;
+    background-color: rgba(255, 255, 255, 0.2);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.3s;
+    z-index: 5;
+}
+
+.carousel-nav:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.carousel-prev {
+    left: -70px;
+}
+
+.carousel-next {
+    right: -70px;
+}
+
+.carousel-dots {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.carousel-dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin: 0 8px;
+    background-color: rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.carousel-dot.active {
+    background-color: white;
+    transform: scale(1.2);
+}
+
+.zoomable {
+    cursor: zoom-in;
+    transition: transform 0.3s;
+}
+
+.zoomable:hover {
+    transform: scale(1.05);
+}
+
+/* PDF Modal styles */
+.pdf-modal {
+    display: none;
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(5px);
+}
+
+.pdf-modal-content {
+    background-color: white;
+    margin: 5% auto;
+    padding: 20px;
+    width: 80%;
+    max-width: 900px;
+    height: 80%;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    position: relative;
+    animation: modalZoomIn 0.4s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.pdf-image {
+    max-width: 100%;
+    max-height: calc(100% - 50px);
+    object-fit: contain;
+    margin: 0 auto;
+    display: block;
+}
+
+@keyframes modalZoomIn {
+    from {transform: scale(0.7); opacity: 0;}
+    to {transform: scale(1); opacity: 1;}
+}
+
+.pdf-modal-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    color: #666;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.pdf-modal-close:hover {
+    color: var(--secondary);
+}
+
+.pdf-modal-title {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: var(--primary);
+    padding-right: 30px;
+}
+
+/* Web Browser Modal styles - similar to PDF Modal */
+.web-modal {
+    display: none;
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(5px);
+}
+
+.web-modal-content {
+    background-color: white;
+    margin: 5% auto;
+    padding: 20px;
+    width: 85%;
+    max-width: 1000px;
+    height: 85%;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    position: relative;
+    animation: modalZoomIn 0.4s ease;
+}
+
+.web-embed {
+    width: 100%;
+    height: calc(100% - 50px);
+    border: none;
+}
+
+.web-modal-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    color: #666;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.web-modal-close:hover {
+    color: var(--secondary);
+}
+
+.web-modal-title {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: var(--primary);
+    padding-right: 30px;
+}
+
+/* Specific styling for slide 8 cards */
+#slide8 .card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
+#slide8 .slide-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* Styles for slide 9 (Taking it Further) */
+#slide9 .example-container > div {
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* Cube container with icons that transform into 3D cube on click */
+#cube-container {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin: 20px 0;
+    height: 200px;
+    perspective: 1000px;
+    cursor: pointer;
+    position: relative;
+}
+
+/* Initial state: icons side by side */
+#initial-icons {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    position: relative;
+}
+
+#initial-icons div {
+    width: 120px;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255,255,255,0.9);
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* 3D cube (hidden initially) */
+#cube-wrapper {
+    width: 120px;
+    height: 120px;
+    position: absolute;
+    transform-style: preserve-3d;
+    transition: transform 1.5s ease;
+    opacity: 0;
+    pointer-events: none;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Front face (Video) */
+#video-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255,255,255,0.9);
+    backface-visibility: visible;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transform: translateZ(60px);
+}
+
+/* Right face (Image) */
+#image-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255,255,255,0.9);
+    backface-visibility: visible;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transform: rotateY(90deg) translateZ(60px);
+}
+
+/* Top face (Audio) */
+#audio-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255,255,255,0.9);
+    backface-visibility: visible;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transform: rotateX(-90deg) translateZ(60px);
+}
+
+/* Second cube container with device icons that transform into 3D cube on click */
+#device-cube-container {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin: 20px 0;
+    height: 200px;
+    perspective: 1000px;
+    cursor: pointer;
+    position: relative;
+}
+
+/* Initial state: device icons side by side */
+#device-initial-icons {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    position: relative;
+}
+
+#desktop-icon {
+    width: 120px;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255,255,255,0.9);
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+#tablet-icon {
+    width: 120px;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255,255,255,0.9);
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+#mobile-icon {
+    width: 120px;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255,255,255,0.9);
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* 3D cube (hidden initially) */
+#device-cube-wrapper {
+    width: 120px;
+    height: 120px;
+    position: absolute;
+    transform-style: preserve-3d;
+    transition: transform 1.5s ease;
+    opacity: 0;
+    pointer-events: none;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Front face (Desktop) */
+#desktop-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255,255,255,0.9);
+    backface-visibility: visible;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transform: translateZ(60px);
+}
+
+/* Right face (Tablet) */
+#tablet-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255,255,255,0.9);
+    backface-visibility: visible;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transform: rotateY(90deg) translateZ(60px);
+}
+
+/* Top face (Mobile) */
+#mobile-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255,255,255,0.9);
+    backface-visibility: visible;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transform: rotateX(-90deg) translateZ(60px);
+}
+
+/* Attribution styles */
+.attribution {
+    font-size: 0.7rem;
+    text-align: center;
+    margin-top: 20px;
+    opacity: 0.6;
+}
+
+.attribution-text {
+    margin-top: 0.5rem;
+    font-size: 0.7rem;
+    opacity: 0.7;
+    text-align: center;
+}
+
+/* New split layout styles for title slide */
+.split-layout {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+}
+
+/* Spectrum-style split layout for title slide */
+.split-left {
+    flex: 1;
+    text-align: left;
+    padding: 40px;
+    height: 100%;
+    background: linear-gradient(135deg, var(--spectrum-blue-300), var(--spectrum-blue-700));
+    color: var(--spectrum-gray-50);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.split-left p {
+    color: var(--spectrum-gray-50);
+}
+
+.split-left h1 {
+    color: var(--spectrum-gray-50);
+}
+
+.split-right {
+    flex: 1;
+    background-color: var(--card-bg);
+    border-left: 1px solid var(--border-color);
+    padding: 40px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.agenda-title {
+    margin-top: 0;
+    color: var(--primary);
+    margin-bottom: 30px;
+    font-size: 2rem;
+}
+
+.agenda-list {
+    list-style-type: none;
+    padding-left: 0;
+    font-size: 1.4rem;
+}
+
+.agenda-item {
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: var(--secondary);
+    font-size: 3rem;
+}
+
+.agenda-subitem {
+    margin-bottom: 15px;
+    padding-left: 20px;
+    font-weight: 500;
+    color: var(--text);
+    font-size: 2rem;
+}
+
+.start-button {
+    margin-top: 40px;
+    align-self: flex-start;
+}
+
+/* Example container styles */
+.centered-example-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.key-points-container {
+    margin: 2rem auto;
+    width: 90%;
+    max-width: 1200px;
+    text-align: left;
+}
+
+.key-point {
+    font-size: var(--spectrum-font-size-800);
+    margin-bottom: 1.5rem;
+    line-height: 1.4;
+}
+
+/* Update existing versus container with Spectrum colors */
+.versus-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: var(--spectrum-spacing-600) 0;
+    gap: var(--spectrum-spacing-600);
+}
+
+.versus-divider {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.versus-divider::after {
+    content: "VS";
+    position: absolute;
+    color: var(--secondary);
+    font-weight: bold;
+    font-size: 1.8rem;
+    text-shadow: 0 0 8px rgba(255, 152, 67, 0.5);
+}
+
+/* Remove additional line for versus divider */
+.versus-divider span {
+    display: none;
+}
+
+.versus-side {
+    flex: 1;
+    text-align: center;
+    padding: var(--spectrum-spacing-500);
+    background-color: var(--spectrum-gray-50);
+    border: 1px solid var(--spectrum-gray-200);
+    border-radius: var(--spectrum-corner-radius-200);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.zoomable-image {
+    max-width: 30%;
+    border-radius: 8px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    cursor: zoom-in;
+}
+
+.citation-text {
+    margin-top: 1rem;
+    text-align: center;
+}
+
+/* Specific styling for slide 7 cards */
+#slide7 .card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
+#slide7 .slide-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* Remove background and shadow for slide 7 icons */
+#slide7 .zoomable-image {
+    box-shadow: none;
+    border-radius: 0;
+    background: none;
+}
+
+/* Styles for slide 9 (Taking it Further) */
+#slide9 .example-container > div {
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* Spectrum Box - for content cards */
+.spectrum-box {
+    background-color: var(--card-bg);
+    padding: var(--spectrum-spacing-100) var(--spectrum-spacing-400);
+    border-radius: var(--spectrum-corner-radius-100); /* 4px - less rounded */
+    border: 1px solid var(--border-color);
+    display: inline-block;
+}
+
+.spectrum-box-compact {
+    background-color: var(--card-bg);
+    padding: var(--spectrum-spacing-100) var(--spectrum-spacing-200);
+    border-radius: var(--spectrum-corner-radius-100); /* 4px - less rounded */
+    border: 1px solid var(--border-color);
+    display: inline-block;
+}
+
+.spectrum-box-heading {
+    margin: 0 0 var(--spectrum-spacing-200) 0;
+    font-weight: 600;
+}
+
+.spectrum-box-body {
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+/* Spectrum Code Box - for code snippets */
+.spectrum-code-box {
+    background-color: var(--code-bg);
+    padding: var(--spectrum-spacing-100);
+    border-radius: var(--spectrum-corner-radius-75); /* 2px - less rounded */
+    border: 1px solid var(--code-border);
+    display: inline-block;
+    font-family: "adaptive-mono", monospace;
+    font-size: var(--spectrum-font-size-100);
+}
+
+.spectrum-code-box.primary {
+    border-color: var(--color-heading);
+    color: var(--color-heading);
+}
+
+.spectrum-code-box.secondary {
+    border-color: var(--color-subheading);
+    color: var(--color-subheading);
+}
+
+.spectrum-code-box.emphasized {
+    border-width: 2px;
+}
+
+/* Spectrum-style code blocks */
+pre, code {
+    font-family: "adaptive-mono", monospace;
+    background-color: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: var(--spectrum-corner-radius-100);
+    padding: var(--spectrum-spacing-200);
+    font-size: var(--spectrum-font-size-100);
+    color: var(--text);
+}
+
+pre {
+    padding: var(--spectrum-spacing-400);
+    overflow-x: auto;
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    transition: all 0.13s ease-in-out;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.theme-toggle:hover {
+    background-color: var(--light);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    transform: scale(1.05);
+}
+
+.theme-toggle svg {
+    width: 20px;
+    height: 20px;
+    fill: var(--spectrum-gray-600);
+    transition: fill 0.13s ease-in-out;
+}
+
+.theme-toggle:focus {
+    outline: 2px solid var(--spectrum-gray-500);
+    outline-offset: 2px;
+}
+
+/* Dark mode adjustments for theme toggle icon */
+[data-theme="dark"] .theme-toggle:focus {
+    outline: 2px solid var(--spectrum-gray-500);
+}
+
+/* Dark mode adjustments for images and white backgrounds */
+[data-theme="dark"] .example-item {
+    background: var(--card-bg);
+}
+
+[data-theme="dark"] .flip-card-front,
+[data-theme="dark"] .flip-card-back {
+    background-color: var(--card-bg);
+}
+
+[data-theme="dark"] .versus-side {
+    background-color: var(--card-bg);
+}
+
+[data-theme="dark"] img:not([src*="logo"]) {
+    opacity: 0.9;
+}
+
+/* Spectrum-style status indicators */
+.status-positive {
+    color: var(--spectrum-green-600);
+    background-color: rgba(45, 157, 120, 0.1);
+    border: 1px solid var(--spectrum-green-400);
+    padding: var(--spectrum-spacing-200);
+    border-radius: var(--spectrum-corner-radius-100);
+}
+
+.status-negative {
+    color: var(--spectrum-red-600);
+    background-color: rgba(236, 91, 98, 0.1);
+    border: 1px solid var(--spectrum-red-400);
+    padding: var(--spectrum-spacing-200);
+    border-radius: var(--spectrum-corner-radius-100);
+}
+
+.status-notice {
+    color: var(--spectrum-orange-600);
+    background-color: rgba(255, 149, 0, 0.1);
+    border: 1px solid var(--spectrum-orange-400);
+    padding: var(--spectrum-spacing-200);
+    border-radius: var(--spectrum-corner-radius-100);
+}
+
+/* Text size utilities aligned with Spectrum tokens */
+.text-display { 
+    font-size: var(--spectrum-font-size-800); 
+}
+
+.text-heading { 
+    font-size: var(--spectrum-font-size-500); 
+}
+
+.text-body-large { 
+    font-size: var(--spectrum-font-size-300); 
+}
+
+.text-body { 
+    font-size: var(--spectrum-font-size-100); 
+}
+
+.text-small { 
+    font-size: var(--spectrum-font-size-75); 
+}
+
+.text-caption { 
+    font-size: var(--spectrum-font-size-50); 
+}
+
+/* Common component patterns */
+.quote-text { 
+    font-size: var(--spectrum-font-size-800); 
+    line-height: 1.6; 
+    font-style: italic; 
+}
+
+.attribution-text { 
+    font-size: var(--spectrum-font-size-500); 
+    opacity: 0.8; 
+}
+
+.flow-label { 
+    font-size: var(--spectrum-font-size-100); 
+    font-weight: bold; 
+}
+
+.flow-arrow { 
+    font-size: var(--spectrum-font-size-500); 
+    color: var(--color-neutral); 
+}
+
+.tool-button { 
+    font-size: var(--spectrum-font-size-75); 
+    padding: 0.4rem 0.6rem; 
+    border-radius: var(--spectrum-corner-radius-100); 
+}
+
+.expandable-content { 
+    font-size: var(--spectrum-font-size-300); 
+    line-height: 1.8; 
+}
+
+/* Animated Gradient Text Effect */
+.animated-title {
+    background: linear-gradient(90deg, 
+        #ff006e,
+        #8338ec,
+        #3a86ff,
+        #8338ec,
+        #ff006e);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientAnimation 4s ease infinite;
+}
+
+@keyframes gradientAnimation {
+    0% { 
+        background-position: 0% 50%; 
+    }
+    50% { 
+        background-position: 100% 50%; 
+    }
+    100% { 
+        background-position: 0% 50%; 
+    }
+}
+

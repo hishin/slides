@@ -1,0 +1,1708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Assisted Video Editing</title>
+    <link rel="stylesheet" href="https://use.typekit.net/mqk3dyg.css">
+    
+    <link rel="stylesheet" href="styles.css">
+    
+    <style>
+        /* Hide scrollbar for transcript code block */
+        .carousel-item pre::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Password protection overlay */
+        #password-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1473E6, #9256D9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        #password-box {
+            background: white;
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            text-align: center;
+            max-width: 400px;
+        }
+
+        #password-box h2 {
+            margin-bottom: 1rem;
+            color: #1473E6;
+        }
+
+        #password-box input {
+            width: 100%;
+            padding: 0.75rem;
+            margin: 1rem 0;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        #password-box button {
+            width: 100%;
+            padding: 0.75rem;
+            background: #1473E6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        #password-box button:hover {
+            background: #9256D9;
+        }
+
+        #password-error {
+            color: #d32f2f;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            min-height: 1.5rem;
+        }
+
+        .content-hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Password Protection Overlay -->
+    <div id="password-overlay">
+        <div id="password-box">
+            <h2>🔒 Protected Content</h2>
+            <p>Please enter the passphrase to view this presentation</p>
+            <input type="password" id="password-input" placeholder="Enter passphrase" autocomplete="off" />
+            <button onclick="checkPassword()">Submit</button>
+            <div id="password-error"></div>
+        </div>
+    </div>
+
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+    
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z"/>
+        </svg>
+        <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="display: none;">
+            <path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z"/>
+        </svg>
+    </button>
+    
+    <div class="presentation" id="presentation">
+        <!-- Navigation arrows -->
+        <div class="nav-arrows">
+            <a href="#" class="arrow prev" id="prevArrow">
+                <svg width="18" height="18" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M22.5 9L13.5 18L22.5 27" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
+            <a href="#" class="arrow next" id="nextArrow">
+                <svg width="18" height="18" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M13.5 9L22.5 18L13.5 27" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
+        </div>
+        
+        <!-- Slide 1: Title -->
+        <div class="slide active" id="slide1" style="background: linear-gradient(135deg, var(--slide1-gradient-start), var(--slide1-gradient-end));">
+            <h1 class="animated-title">VIDEO EDITING with AGENTS</h1>
+            <p class="slide-subtitle" style="color: var(--dark);">Valentina Shin</p>
+        </div>
+
+        <!-- Slide 2: Quote Slide -->
+        <div class="slide" id="slide2">
+            <div class="slide-content" style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; padding: 3rem;">
+                <div style="max-width: 900px; text-align: center; cursor: pointer;" id="quoteContainer">
+                    <div class="quote-text" style="margin-bottom: 2rem;" id="quoteText">
+                        What's fun about <span class="transition-word" data-original="story development at Pixar" data-new="editing videos with agents" style="display: inline-block; min-width: 420px; text-align: center; transition: opacity 0.3s ease-in-out;">story development at Pixar</span> is it's a journey. You don't just <span class="transition-word" data-original="write a script" data-new="command an agent" style="display: inline-block; min-width: 230px; text-align: center; transition: opacity 0.3s ease-in-out;">write a script</span> and then <span class="transition-word" data-original="that's the movie you make" data-new="that's the video you export" style="display: inline-block; min-width: 360px; text-align: center; transition: opacity 0.3s ease-in-out;">that's the movie you make</span>. It's just constant evolution and being open to that and that collaboration with <span class="transition-word" data-original="the voice actors and with the artists and animators at Pixar" data-new="the agent" style="display: inline-block; min-width: 950px; text-align: center; transition: opacity 0.3s ease-in-out;">the voice actors and with the artists and animators at Pixar</span>
+                    </div>
+                    <div id="attribution" class="attribution-text" style="margin-top: 2rem; transition: opacity 0.3s ease-in-out;">
+                        — John Lasseter
+                    </div>
+                    <div id="source" style="margin-top: 1rem; transition: opacity 0.3s ease-in-out;">
+                        <a href="https://quotefancy.com/quote/1287486/John-Lasseter-What-s-fun-about-the-story-development-at-Pixar-is-it-s-a-journey-You-don-t" target="_blank" style="opacity: 0.6; font-size: var(--spectrum-font-size-100); text-decoration: none;">
+                            Source: QuoteFancy
+                        </a>
+                    </div>
+                    <div style="margin-top: 2rem; font-size: var(--spectrum-font-size-100); opacity: 0.5;">
+                        (Click here)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Iterative Creative Process -->
+        <div class="slide" id="slide3">
+            <div class="slide-content" style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; padding: 3rem;">
+                <div style="max-width: 1100px; text-align: center;">
+                    <h2 style="margin-bottom: 1.5rem;">Creative Work is Iterative</h2>
+                    <p style="margin-bottom: 1rem;">
+                        Complex creative work rarely succeeds with a single attempt and final output.</br>
+                        Like commissioning an architect or artist, effective partnership relies on</br>
+                        <em>iterative refinement through intermediate artifacts</em></br>—sketches, drafts, blueprints, storyboards—that enable feedback and collaboration.
+                    </p>
+                    
+                    <!-- Images Row -->
+                    <div style="display: flex; gap: 1.5rem; justify-content: center; align-items: center; margin-top: 2rem;">
+                        <img src="media/AdobeStock_84187034.jpeg" 
+                             alt="Sketches and drafts" 
+                             style="height: 250px; width: 325px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+                        <img src="media/AdobeStock_352645583.jpeg" 
+                             alt="Blueprints and planning" 
+                             style="height: 250px; width: 325px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+                        <img src="media/AdobeStock_383550703.jpeg" 
+                             alt="Storyboards and collaboration" 
+                             style="height: 250px; width: 325px ; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3.5: Iterating to Intermediate Transition -->
+        <div class="slide" id="slide3_5">
+            <div class="slide-content" style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; padding: 3rem;">
+                <div style="text-align: center;">
+                    <div style="font-size: 4rem; font-weight: bold; font-family: var(--spectrum-font-family);">
+                        <div id="transitionText" style="line-height: 1.5;">
+                            <span style="color: var(--color-heading);">I</span><span id="middleText1" style="color: var(--color-subheading);">terating with</span> <span style="color: var(--color-heading);">A</span><span id="middleText2" style="color: var(--color-subheading);">gents</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Definition section (hidden initially) -->
+                    <div id="definitionSection" style="opacity: 0; max-width: 900px; margin: 0 auto; transition: opacity 0.6s ease-in-out; pointer-events: none;">
+                        <div style="width: 100%; height: 1px; background: var(--border-color); margin: 2rem 0 1.5rem 0;"></div>
+                        <div style="text-align: left; padding: 0 2rem;">
+                            <div style="font-style: italic; font-size: var(--spectrum-font-size-200); color: var(--color-neutral); margin-bottom: 0.8rem;">
+                                noun
+                            </div>
+                            <div style="font-size: var(--spectrum-font-size-300); line-height: 1.6; color: var(--color-text);">
+                                Any human-generated or computationally-produced material created during the video editing process that serves to shape and refine the project, but is not part of the final, exported video.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 3rem; font-size: var(--spectrum-font-size-200); opacity: 0.6; cursor: pointer;" id="transitionHint">
+                    (Click to animate)
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3.6: Examples of Intermediate Artifacts -->
+        <div class="slide" id="slide3_6">
+            <div class="slide-content" style="padding: 2rem 3rem; height: 100%; display: flex; flex-direction: column;">
+                <h2 style="margin-bottom: 1.5rem; text-align: center; flex-shrink: 0;">Examples of Intermediate Artifacts</h2>
+                
+                <!-- Carousel Container -->
+                <div style="position: relative; flex: 1; display: flex; flex-direction: column; min-height: 0;">
+                    <!-- Carousel Items -->
+                    <div id="artifactCarousel" style="flex: 1; position: relative; overflow: hidden;">
+                        <!-- Transcript Example -->
+                        <div class="carousel-item" data-index="0" style="position: absolute; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; transform: translateX(0); transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out; z-index: 1;">
+                            <h3 style="font-size: var(--spectrum-font-size-500); margin-bottom: 0.5rem; color: white; text-align: center;">Transcript</h3>
+                            <div style="padding: 1rem; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                                <pre style="margin: 0; font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace; font-size: 0.85rem; line-height: 1.6; color: var(--color-text); white-space: pre; background: var(--code-bg); padding: 1.5rem; border-radius: 6px; border: none; overflow-x: auto; max-width: 1100px; scrollbar-width: none; -ms-overflow-style: none; text-align: left;"><code style="font-family: inherit; font-size: inherit; line-height: inherit; color: inherit; white-space: inherit; display: block; border: none; outline: none;">{
+  "segments": [
+    { "offset": 41040,
+      "duration": 4240,
+      "text": "and really do everything that you're supposed to, and it still won't turn out," },
+    
+    { "offset": 45280,
+      "duration": 3000,
+      "text": "or it'll blow up in the kiln, or it will be different." },
+    
+    { "offset": 48280,
+      "duration": 2080,
+      "text": "And that so is life really" },
+    
+    { "offset": 50360,
+      "duration": 4520,
+      "text": "where you can put your all into something and it still won't turn out" }
+  ]
+}</code></pre>
+                            </div>
+                        </div>
+                        
+                        <!-- Outline Example -->
+                        <div class="carousel-item" data-index="1" style="position: absolute; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transform: translateX(100%); transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out; z-index: 0;">
+                            <h3 style="font-size: var(--spectrum-font-size-500); margin-bottom: 0.5rem; color: white; text-align: center;">Outline</h3>
+                            <div style="padding: 1rem; overflow: visible; display: flex; align-items: center; justify-content: center;">
+                                <img src="media/sb_outline.png" alt="Story Builder Outline" style="max-height: 60vh; width: auto; height: auto; border-radius: 4px;">
+                            </div>
+                        </div>
+                        
+                        <!-- Script Example -->
+                        <div class="carousel-item" data-index="2" style="position: absolute; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transform: translateX(100%); transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out; z-index: 0;">
+                            <h3 style="font-size: var(--spectrum-font-size-500); margin-bottom: 0.5rem; color: white; text-align: center;">Script</h3>
+                            <div style="padding: 1rem; overflow: visible; display: flex; align-items: center; justify-content: center;">
+                                <img src="media/emotion_script.png" alt="Script with Emotions" style="max-height: 60vh; width: auto; height: auto; border-radius: 4px;">
+                            </div>
+                        </div>
+                        
+                        <!-- Feedback Example -->
+                        <div class="carousel-item" data-index="3" style="position: absolute; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transform: translateX(100%); transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out; z-index: 0;">
+                            <h3 style="font-size: var(--spectrum-font-size-500); margin-bottom: 0.5rem; color: white; text-align: center;">Collaborators' Feedback</h3>
+                            <div style="padding: 1rem; overflow: visible; display: flex; align-items: center; justify-content: center;">
+                                <img src="https://nofilmschool.com/media-library/review-page-0.png?id=34078329&width=1245&height=700&quality=50&coordinates=0%2C0%2C0%2C306" alt="Feedback Interface" style="max-height: 60vh; width: auto; height: auto; border-radius: 4px;">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Carousel Navigation Dots -->
+                    <div style="display: flex; justify-content: center; gap: 1rem; padding: 1.5rem 0; flex-shrink: 0;">
+                        <button class="carousel-dot" data-index="0" style="width: 12px; height: 12px; border-radius: 50%; background: white; border: none; cursor: pointer; opacity: 1; transition: opacity 0.3s;"></button>
+                        <button class="carousel-dot" data-index="1" style="width: 12px; height: 12px; border-radius: 50%; background: white; border: none; cursor: pointer; opacity: 0.3; transition: opacity 0.3s;"></button>
+                        <button class="carousel-dot" data-index="2" style="width: 12px; height: 12px; border-radius: 50%; background: white; border: none; cursor: pointer; opacity: 0.3; transition: opacity 0.3s;"></button>
+                        <button class="carousel-dot" data-index="3" style="width: 12px; height: 12px; border-radius: 50%; background: white; border: none; cursor: pointer; opacity: 0.3; transition: opacity 0.3s;"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Research Question -->
+        <div class="slide" id="slide4">
+            <div class="slide-content" style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; padding: 3rem;">
+                <div style="max-width: 1100px; text-align: center;">
+                    <h2 style="margin-bottom: 2.5rem;">
+                        Which intermediate artifacts are useful?
+                    </h2>
+                    <div style="text-align: left; font-size: var(--spectrum-font-size-500); line-height: 2.2; margin-top: 2rem;">
+                        <!-- Modal Item 1 -->
+                        <div class="modal-trigger-item" data-modal="modal1" style="margin-bottom: 1.5rem; cursor: pointer;">
+                            <span style="font-weight: 500;">Is the artifact used in the final output?</span>
+                        </div>
+                        
+                        <!-- Modal Item 2 -->
+                        <div class="modal-trigger-item" data-modal="modal2" style="margin-bottom: 1.5rem; cursor: pointer;">
+                            <span style="font-weight: 500;">Can the user interact with the artifact to edit the final output?</span>
+                        </div>
+                        
+                        <!-- Modal Item 3 -->
+                        <div class="modal-trigger-item" data-modal="modal3" style="margin-bottom: 1.5rem; cursor: pointer;">
+                            <span style="font-weight: 500;">Does the artifact contain information worth keeping?</span>
+                        </div>
+
+                        <!-- Modal Item 4 -->
+                        <div class="modal-trigger-item" data-modal="modal4" style="margin-bottom: 1.5rem; cursor: pointer;">
+                            <span style="font-weight: 500;">Does the artifact enhance user's understanding?</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal 1 -->
+        <div id="modal1" class="artifact-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; justify-content: center; align-items: center;">
+            <div class="modal-content" style="position: relative; max-width: 85vw; max-height: 85vh; background: var(--bg-color); border-radius: 12px; padding: 3rem 2rem 2rem 2rem; box-shadow: 0 10px 40px rgba(0,0,0,0.3); display: flex; flex-direction: column;">
+                <button class="modal-close" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 2rem; cursor: pointer; color: var(--text-color); line-height: 1; padding: 0.5rem; z-index: 10001;">&times;</button>
+                <img src="media/broll-suggestion.gif" alt="B-roll suggestion demonstration" class="clickable-gif" style="max-width: 100%; max-height: calc(85vh - 5rem); width: auto; height: auto; object-fit: contain; border-radius: 8px;">
+            </div>
+        </div>
+
+        <!-- Modal 2 -->
+        <div id="modal2" class="artifact-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; justify-content: center; align-items: center;">
+            <div class="modal-content" style="position: relative; max-width: 85vw; max-height: 85vh; background: var(--bg-color); border-radius: 12px; padding: 3rem 2rem 2rem 2rem; box-shadow: 0 10px 40px rgba(0,0,0,0.3); display: flex; flex-direction: column;">
+                <button class="modal-close" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 2rem; cursor: pointer; color: var(--text-color); line-height: 1; padding: 0.5rem; z-index: 10001;">&times;</button>
+                <img src="media/text-based-editing.gif" alt="Text-based editing demonstration" class="clickable-gif" style="max-width: 100%; max-height: calc(85vh - 5rem); width: auto; height: auto; object-fit: contain; border-radius: 8px;">
+            </div>
+        </div>
+
+        <!-- Modal 3 -->
+        <div id="modal3" class="artifact-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; justify-content: center; align-items: center;">
+            <div class="modal-content" style="position: relative; max-width: 85vw; max-height: 85vh; background: var(--bg-color); border-radius: 12px; padding: 3rem 2rem 2rem 2rem; box-shadow: 0 10px 40px rgba(0,0,0,0.3); display: flex; flex-direction: column;">
+                <button class="modal-close" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 2rem; cursor: pointer; color: var(--text-color); line-height: 1; padding: 0.5rem; z-index: 10001;">&times;</button>
+                <img src="https://miro.medium.com/1*yJeuvHYLlWQgEG52ubLeLg.jpeg" alt="Frankenbite artifact" style="max-width: 100%; max-height: calc(85vh - 5rem); width: auto; height: auto; object-fit: contain; border-radius: 8px;">
+            </div>
+        </div>
+
+        <!-- Modal 4 -->
+        <div id="modal4" class="artifact-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; justify-content: center; align-items: center;">
+            <div class="modal-content" style="position: relative; max-width: 85vw; max-height: 70vh; background: var(--bg-color); border-radius: 12px; padding: 3rem 2rem 2rem 2rem; box-shadow: 0 10px 40px rgba(0,0,0,0.3); display: flex; flex-direction: column;">
+                <button class="modal-close" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 2rem; cursor: pointer; color: var(--text-color); line-height: 1; padding: 0.5rem; z-index: 10001;">&times;</button>
+                <div style="display: flex; gap: 1rem; align-items: center; justify-content: center; max-height: calc(70vh - 5rem);">
+                    <img src="media/descript-underlord.png" alt="Descript Underlord" style="max-width: 48%; max-height: 100%; object-fit: contain; border-radius: 8px;">
+                    <img src="media/sb_outline.png" alt="StoryBuilder Outline" style="max-width: 48%; max-height: 100%; object-fit: contain; border-radius: 8px;">
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Media Representation & Task Formulation -->
+        <div class="slide" id="slide5">
+            <div class="slide-content" style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; padding: 3rem;">
+                <div style="max-width: 1100px; text-align: center;">
+                    <h2 style="margin-bottom: 2.5rem;">
+                        How do we represent multi-modal media and formulate the video editing task for seamless human-agent interaction?
+                    </h2>
+                    <div style="text-align: left; font-size: var(--spectrum-font-size-500); line-height: 2.2; margin-top: 2rem;">
+                        <!-- Expandable Item 1 -->
+                        <div class="expandable-item" style="margin-bottom: 1rem; cursor: pointer; padding: 1rem; border-radius: 8px; background: var(--card-bg); border: 1px solid var(--border-color); transition: all 0.3s ease;">
+                            <div class="expandable-header" style="display: flex; align-items: center; justify-content: space-between;">
+                                <span style="font-weight: 500;">How do we represent multi-modal media?</span>
+                                <span class="expand-icon" style="font-size: var(--spectrum-font-size-300); transition: transform 0.3s ease;">▶</span>
+                            </div>
+                            <div class="expandable-content" style="display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color); opacity: 0.9;">
+                                Current representations like transcripts and visual captions provide a succinct summary, which is effective for rough semantic edits (e.g., "create an edit about..."). However different tasks require different representation, for example, to enable higher-level creative control or fine-grained visual editing. I am researching richer, multi-modal representations that capture deeper context, such as narrative structure, visual style, and emotional tone.
+                            </div>
+                        </div>
+                        
+                        <!-- Expandable Item 2 -->
+                        <div class="expandable-item" style="margin-bottom: 1rem; cursor: pointer; padding: 1rem; border-radius: 8px; background: var(--card-bg); border: 1px solid var(--border-color); transition: all 0.3s ease;">
+                            <div class="expandable-header" style="display: flex; align-items: center; justify-content: space-between;">
+                                <span style="font-weight: 500;">What is the right level of abstraction for the video editing task?</span>
+                                <span class="expand-icon" style="font-size: var(--spectrum-font-size-300); transition: transform 0.3s ease;">▶</span>
+                            </div>
+                            <div class="expandable-content" style="display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color); opacity: 0.9;">
+                                [Content for abstraction level to be added]
+                            </div>
+                        </div>
+                        
+                        <!-- Expandable Item 3 -->
+                        <div class="expandable-item" style="margin-bottom: 1rem; cursor: pointer; padding: 1rem; border-radius: 8px; background: var(--card-bg); border: 1px solid var(--border-color); transition: all 0.3s ease;">
+                            <div class="expandable-header" style="display: flex; align-items: center; justify-content: space-between;">
+                                <span style="font-weight: 500;">How do we enable high-level orchestrator agents?</span>
+                                <span class="expand-icon" style="font-size: var(--spectrum-font-size-300); transition: transform 0.3s ease;">▶</span>
+                            </div>
+                            <div class="expandable-content" style="display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color); opacity: 0.9;">
+                                [Content for orchestrator agents to be added]
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Media Representation & Task Formulation -->
+        <div class="slide" id="slide5">
+            <div class="slide-content" style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; padding: 3rem;">
+                <div style="max-width: 1100px; text-align: center;">
+                    <h2 style="margin-bottom: 2.5rem;">
+                        How do we represent multi-modal media and formulate the video editing task for seamless human-agent interaction?
+                    </h2>
+                    <div style="text-align: left; font-size: var(--spectrum-font-size-500); line-height: 2.2; margin-top: 2rem;">
+                        <!-- Expandable Item 1 -->
+                        <div class="expandable-item" style="margin-bottom: 1rem; cursor: pointer; padding: 1rem; border-radius: 8px; background: var(--card-bg); border: 1px solid var(--border-color); transition: all 0.3s ease;">
+                            <div class="expandable-header" style="display: flex; align-items: center; justify-content: space-between;">
+                                <span style="font-weight: 500;">How do we represent multi-modal media?</span>
+                                <span class="expand-icon" style="font-size: var(--spectrum-font-size-300); transition: transform 0.3s ease;">▶</span>
+                            </div>
+                            <div class="expandable-content" style="display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color); opacity: 0.9;">
+                                Current representations like transcripts and visual captions provide a succinct summary, which is effective for rough semantic edits (e.g., "create an edit about..."). However different tasks require different representation, for example, to enable higher-level creative control or fine-grained visual editing. I am researching richer, multi-modal representations that capture deeper context, such as narrative structure, visual style, and emotional tone.
+                            </div>
+                        </div>
+                        
+                        <!-- Expandable Item 2 -->
+                        <div class="expandable-item" style="margin-bottom: 1rem; cursor: pointer; padding: 1rem; border-radius: 8px; background: var(--card-bg); border: 1px solid var(--border-color); transition: all 0.3s ease;">
+                            <div class="expandable-header" style="display: flex; align-items: center; justify-content: space-between;">
+                                <span style="font-weight: 500;">What is the right level of abstraction for the video editing task?</span>
+                                <span class="expand-icon" style="font-size: var(--spectrum-font-size-300); transition: transform 0.3s ease;">▶</span>
+                            </div>
+                            <div class="expandable-content" style="display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color); opacity: 0.9;">
+                                [Content for abstraction level to be added]
+                            </div>
+                        </div>
+                        
+                        <!-- Expandable Item 3 -->
+                        <div class="expandable-item" style="margin-bottom: 1rem; cursor: pointer; padding: 1rem; border-radius: 8px; background: var(--card-bg); border: 1px solid var(--border-color); transition: all 0.3s ease;">
+                            <div class="expandable-header" style="display: flex; align-items: center; justify-content: space-between;">
+                                <span style="font-weight: 500;">How do we enable high-level orchestrator agents?</span>
+                                <span class="expand-icon" style="font-size: var(--spectrum-font-size-300); transition: transform 0.3s ease;">▶</span>
+                            </div>
+                            <div class="expandable-content" style="display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color); opacity: 0.9;">
+                                [Content for orchestrator agents to be added]
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: From Fixed Pipeline to Orchestrator -->
+        <div class="slide" id="slide6">
+            <div class="slide-content" style="padding-top: 3rem;">
+                
+                <div style="display: flex; flex-direction: row; gap: 2rem; align-items: stretch; justify-content: center;">
+                    <!-- Left Column: Agentic Workflow -->
+                    <div style="flex: 1; display: flex; flex-direction: column; max-width: 800px;">
+                        <h2 style="text-align: center;">Agentic Workflow</h2>
+                        <p style="text-align: center;">LLMs and tools are orchestrated through<br> predefined, explicit control flow paths.</p>
+                        
+                        <!-- Squirrel Story Builder -->
+                        <div style="margin-bottom: 1.5rem;">
+                            <div style="margin-bottom: 0.3rem; opacity: 0.7; font-size: var(--spectrum-font-size-500);">Squirrel Story Builder</div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                                <div class="spectrum-box-compact">Get Transcript</div>
+                                <span>→</span>
+                                <div class="spectrum-box-compact">Summarize</div>
+                                <span>→</span>
+                                <div class="spectrum-box-compact">Create Outline</div>
+                                <span>→</span>
+                                <div class="spectrum-box-compact">Edit A-roll</div>
+                                <span>→</span>
+                                <span>...</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Voiceover Pipeline -->
+                        <div style="margin-bottom: 1.5rem;">
+                            <div style="margin-bottom: 0.3rem; opacity: 0.7; font-size: var(--spectrum-font-size-500);">Voiceover + Visuals</div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                                <div class="spectrum-box-compact">Get Visual Captions</div>
+                                <span>→</span>
+                                <div class="spectrum-box-compact">Summarize</div>
+                                <span>→</span>
+                                <div class="spectrum-box-compact">Generate Voiceover</div>
+                                <span>→</span>
+                                <div class="spectrum-box-compact">Add Visuals</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Visual + Text Captions Pipeline -->
+                        <div style="margin-bottom: 1.5rem;">
+                            <div style="margin-bottom: 0.3rem; opacity: 0.7; font-size: var(--spectrum-font-size-500);">On-screen Captions + Visuals</div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                                <div class="spectrum-box-compact">Get Visual Captions</div>
+                                <span>→</span>
+                                <div class="spectrum-box-compact">Summarize</div>
+                                <span>→</span>
+                                <div class="spectrum-box-compact">Generate Captions</div>
+                                <span>→</span>
+                                <div class="spectrum-box-compact">Add Visuals</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Express Clipmaker -->
+                        <div style="margin-bottom: 1.5rem;">
+                            <div style="margin-bottom: 0.3rem; opacity: 0.7; font-size: var(--spectrum-font-size-500);">Express Clip Maker</div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                                <div class="spectrum-box-compact">Get Transcript</div>
+                                <span>→</span>
+                                <div class="spectrum-box-compact">Extract Highlights</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Scenry AI Shorts -->
+                        <div style="margin-bottom: 1.5rem;">
+                            <div style="margin-bottom: 0.3rem; opacity: 0.7; font-size: var(--spectrum-font-size-500);">Scenry AI Shorts</div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                                <div class="spectrum-box-compact">Get Transcript</div>
+                                <span>→</span>
+                                <div class="spectrum-box-compact">Extract Social Highlights</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- VS Divider -->
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <div style="font-size: var(--spectrum-font-size-800); font-weight: bold; background: linear-gradient(135deg, var(--slide1-gradient-start), var(--slide1-gradient-end)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; filter: drop-shadow(0 2px 8px rgba(20, 115, 230, 0.15));">
+                            VS
+                        </div>
+                    </div>
+                    
+                    <!-- Right Column: Autonomous Agents -->
+                    <div style="flex: 1; display: flex; flex-direction: column; max-width: 800px;">
+                        <h2 style="text-align: center;">Autonomous Agents</h2>
+                        <p style="text-align: center;">LLM dynamically directs its own processes<br> and tool usage in an emergent manner.</p>
+                        
+                        <div style="display: flex; align-items: center; gap: 2rem; justify-content: center; margin-top: auto; margin-bottom: auto;">
+                            <div style="font-size: var(--spectrum-font-size-500); ">Orchestrator<br> Agent</div>
+                            <div style="font-size: var(--spectrum-font-size-800);">↔</div>
+                            <div style="display: flex; flex-direction: column; gap: 0.6rem;">
+                                <div class="spectrum-box">Sub-Agent or Tool</div>
+                                <div class="spectrum-box">Sub-Agent or Tool</div>
+                                <div class="spectrum-box">Sub-Agent or Tool</div>
+                                <div class="spectrum-box">Sub-Agent or Tool</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6.5: Designing Sub-Agents and Tools -->
+        <div class="slide" id="slide6_5">
+            <div class="slide-content">
+                <h2>How do we design sub-agents and tools?</h2>
+                
+                <div style="margin-top: 2rem;">
+                    <!-- Spectrum Arrow -->
+                    <div style="position: relative; margin: 0 3rem 3rem 3rem;">
+                        <div style="height: 4px; background: linear-gradient(to right, var(--spectrum-blue-600), var(--spectrum-purple-600), var(--spectrum-magenta-600)); border-radius: 2px;"></div>
+                        <div style="display: flex; justify-content: space-between; margin-top: -0.5rem;">
+                            <div style="font-weight: bold;">←</div>
+                            <div style="font-weight: bold;">→</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Three Columns -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem; align-items: start;">
+                        
+                        <!-- Left: Low-Level Generic Tools -->
+                        <div style="text-align: center;">
+                            <h3 style="margin-bottom: 1rem; font-size: var(--spectrum-font-size-400);">Low-Level Generic Tools</h3>
+                            <div style="display: flex; flex-direction: column; gap: 0.6rem;">
+                                <div class="spectrum-box">Get Transcript</div>
+                                <div class="spectrum-box">Search Transcript</div>
+                                <div class="spectrum-box">Get Visual Captions</div>
+                                <div class="spectrum-box">Search Visual Captions</div>
+                            </div>
+                            <p style="margin-top: 1rem; font-size: var(--spectrum-font-size-75); color: var(--color-neutral); font-style: italic;">
+                                Atomic operations
+                            </p>
+                        </div>
+                        
+                        <!-- Middle: Modular Workflows -->
+                        <div style="text-align: center;">
+                            <h3 style="margin-bottom: 1rem; font-size: var(--spectrum-font-size-400);">Modular Agents / Tools</h3>
+                            <div style="display: flex; flex-direction: column; gap: 0.6rem;">
+                                <div class="spectrum-box" style="background: var(--spectrum-purple-600); color: white; border-color: var(--spectrum-purple-600);">Summarize</div>
+                                <div class="spectrum-box" style="background: var(--spectrum-purple-600); color: white; border-color: var(--spectrum-purple-600);">Edit A-Roll</div>
+                                <div class="spectrum-box" style="background: var(--spectrum-purple-600); color: white; border-color: var(--spectrum-purple-600);">Suggest B-Roll</div>
+                            </div>
+                            
+                            <p style="margin-top: 1rem; font-size: var(--spectrum-font-size-75); color: var(--color-neutral); font-style: italic;">
+                                Composable sub-tasks
+                            </p>
+                        </div>
+                        
+                        <!-- Right: High-Level Workflow Agents -->
+                        <div style="text-align: center;">
+                            <h3 style="margin-bottom: 1rem; font-size: var(--spectrum-font-size-400);">High-Level Workflow Agents</h3>
+                            <div style="display: flex; flex-direction: column; gap: 0.6rem;">
+                                <div class="spectrum-box" style="background: var(--spectrum-magenta-600); color: white; border-color: var(--spectrum-magenta-600);">Squirrel Story Builder</div>
+                                <div class="spectrum-box" style="background: var(--spectrum-magenta-600); color: white; border-color: var(--spectrum-magenta-600);">Voiceover + Visuals</div>
+                                <div class="spectrum-box" style="background: var(--spectrum-magenta-600); color: white; border-color: var(--spectrum-magenta-600);">On-screen Captions + Visuals</div>
+                            </div>
+                            <p style="margin-top: 1rem; font-size: var(--spectrum-font-size-75); color: var(--color-neutral); font-style: italic;">
+                                Specific end-to-end workflows
+                            </p>
+                        </div>
+                        
+                    </div>
+                    
+                    <!-- Question -->
+                    <div style="margin-top: 3rem; text-align: center;">
+                        <h3>What are the right set of modular agents and tools?</h3>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6.75: Experiment -->
+        <div class="slide" id="slide6_75">
+            <div class="slide-content">
+                <h2>Experiment</h2>
+                
+                <div style="display: flex; flex-direction: column; gap: 2rem; margin-top: 2rem; max-width: 1000px; margin-left: auto; margin-right: auto;">
+                    
+                    <!-- Approach Description -->
+                        <p>
+                            I tried separating the Storybuilder pipeline into two major modules: </br>
+                            <b>① Plan</b> (Create Outline / B-Roll Suggest)</br>
+                            <b>② Edit according to plan</b> (Edit Duet / B-Roll Duet)
+                        </p>
+
+                        <p>↓</p>
+                        <p>Editing A-roll and B-roll together did not work well, so I separated them into two modules</p>
+                        <p>↓</p>
+                        <p>
+                            <b>① Plan</b> (Create Outline / B-Roll Suggest)</br>
+                            <b>② Edit A-roll according to plan</b> (Edit Duet)</br>
+                            <b>③ Edit B-roll according to plan</b> (B-Roll Duet) -- not implemented yet
+                        </p>
+                    
+                    <!-- Demo Link -->
+                    <div style="text-align: center; margin-top: 1rem;">
+                        <a href="http://localhost:3000" target="_blank" style="color: var(--spectrum-blue-600); text-decoration: none; font-size: var(--spectrum-font-size-300); font-weight: 500; border-bottom: 2px solid var(--spectrum-blue-600); padding-bottom: 2px; transition: all 0.2s;">
+                           Go to Demo →
+                        </a>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Video Backend Agent Architecture -->
+        <div class="slide" id="slide7">
+            <div class="slide-content">
+                <h2>Video orchestrator agent: ReAct Loop Architecture</h2>
+                <p>The agent follows a ReAct loop: it reasons about the user request, selects tools, and acts on results. It repeats this cycle until the request is fully satisfied.</p>
+                <div style="display: flex; flex-direction: column; gap: 1.5rem; margin-top: 1rem;">
+                    <!-- ReAct Loop Diagram -->
+                    <div style="display: flex; justify-content: center; align-items: center; gap: 2rem;">
+                        <!-- User Request -->
+                        <div class="spectrum-box" style="text-align: center;">
+                            <div class="spectrum-box-heading">User Request</div>
+                        </div>
+                        
+                        <!-- Arrow to Agent -->
+                        <div class="flow-arrow">→</div>
+                        
+                        <!-- Agent Core -->
+                        <div style="text-align: center;">
+                            <div style="background: var(--spectrum-blue-600); color: white; padding: 2rem 2.5rem; border-radius: 50%; min-width: 220px; min-height: 220px; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 4px 12px rgba(20, 115, 230, 0.3);">
+                                <div style="font-size: var(--spectrum-font-size-500); font-weight: bold; margin-bottom: 0.3rem;">Agent</div>
+                                <div style="font-size: var(--spectrum-font-size-100); opacity: 0.85; margin-bottom: 0.1rem;">Reason + Act Loop</div>
+                                <div style="font-size: var(--spectrum-font-size-50); opacity: 0.8; margin-bottom: 0.6rem; font-style: italic;">(ReAct)</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Arrows and Tools -->
+                        <div style="display: flex; flex-direction: column; gap: 1rem;">
+                            <div style="font-size: var(--spectrum-font-size-800); color: var(--color-neutral);">→</div>
+                            <div style="font-size: var(--spectrum-font-size-800); color: var(--color-neutral);">←</div>
+                        </div>
+                        
+                        <!-- Tool Categories -->
+                        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                            <!-- Backend Tools -->
+                            <div>
+                                <h4 style="margin-bottom: 0.5rem; font-size: var(--spectrum-font-size-100);">Backend Tools</h4>
+                                <div style="display: flex; flex-wrap: wrap; gap: 0.4rem;">
+                                    <div class="tool-button" style="background: var(--card-bg); border: 1px solid var(--border-color);">Get transcript</div>
+                                    <div class="tool-button" style="background: var(--card-bg); border: 1px solid var(--border-color);">Search media</div>
+                                    <div class="tool-button" style="background: var(--card-bg); border: 1px solid var(--border-color);">Get visuals</div>
+                                    <div class="tool-button" style="background: var(--card-bg); border: 1px solid var(--border-color);">Plan story</div>
+                                    <div class="tool-button" style="background: var(--card-bg); border: 1px solid var(--border-color);">Build timeline</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Frontend Actions -->
+                            <div>
+                                <h4 style="margin-bottom: 0.5rem; font-size: var(--spectrum-font-size-100);">Frontend Actions</h4>
+                                <div style="display: flex; flex-wrap: wrap; gap: 0.4rem;">
+                                    <div class="tool-button" style="background: var(--card-bg); border: 1px solid var(--border-color);">Add clips</div>
+                                    <div class="tool-button" style="background: var(--card-bg); border: 1px solid var(--border-color);">Trim clips</div>
+                                    <div class="tool-button" style="background: var(--card-bg); border: 1px solid var(--border-color);">Arrange clips</div>
+                                    <div class="tool-button" style="background: var(--card-bg); border: 1px solid var(--border-color);">Update timeline</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Simpler Single-Iteration Model for Contrast -->
+                    <div style="margin-top: 2rem; padding-top: 2rem; border-top: 2px solid var(--border-color);">
+                        <p style="text-align: center; margin-bottom: 1rem;">
+                            In contrast, a simple single-iteration model: the agent responds once with tool calls and completes.
+                            <br>
+                            <a href="https://f.io/biOiazfL" target="_blank" style="color: var(--color-heading); text-decoration: none; font-weight: 500; margin-top: 0.5rem; display: inline-block;">
+                                Demo from Tango: Tango (pw: tango) →
+                            </a>
+                        </p>
+                        <div style="display: flex; justify-content: center; align-items: center; gap: 2rem;">
+                            <!-- User Request -->
+                            <div style="background: var(--card-bg); padding: 0.8rem 1rem; border-radius: var(--spectrum-corner-radius-200); text-align: center;">
+                                <div class="flow-label">User Request</div>
+                            </div>
+                            
+                            <!-- Arrow -->
+                            <div class="flow-arrow">→</div>
+                            
+                            <!-- LLM Agent -->
+                            <div style="background: var(--spectrum-gray-700); color: white; padding: 1rem 1.5rem; border-radius: var(--spectrum-corner-radius-200); text-align: center;">
+                                <div style="font-size: var(--spectrum-font-size-100); font-weight: bold; margin-bottom: 0.3rem;">LLM Agent</div>
+                                <div style="font-size: var(--spectrum-font-size-50); opacity: 0.85;">Single response</div>
+                            </div>
+                            
+                            <!-- Arrow -->
+                            <div class="flow-arrow">→</div>
+                            
+                            <!-- Tool Calls -->
+                            <div style="background: var(--card-bg); padding: 0.8rem 1rem; border-radius: var(--spectrum-corner-radius-200); text-align: center;">
+                                <div class="flow-label">Tool Call(s)</div>
+                            </div>
+                            
+                            <!-- Arrow -->
+                            <div class="flow-arrow">→</div>
+                            
+                            <!-- Done -->
+                            <div style="background: var(--card-bg); padding: 0.8rem 1rem; border-radius: var(--spectrum-corner-radius-200); text-align: center;">
+                                <div class="flow-label">Done</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Trade-offs: Fixed Pipeline vs Orchestrator -->
+        <div class="slide" id="slide8">
+            <div class="slide-content">
+                <h2>Trade-offs: Fixed Pipeline vs Orchestrator</h2>
+                
+                <div class="versus-container">
+                    <div class="versus-side">
+                        <h3 style="color: var(--color-heading); margin-bottom: 2rem;">Fixed Pipeline</h3>
+                        
+                        <div style="background: var(--card-bg); padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem; border: 1px solid var(--border-color);">
+                            <h4 style="margin-top: 0;">Pros</h4>
+                            <ul style="font-size: var(--spectrum-font-size-300); line-height: 1.6; margin: 0;">
+                                <li><em>Less error-prone & predictable:</em> Predefined input/output contracts, same sequence every time, easier to debug</li>
+                                <li><em>Reliable:</em> Well-tested execution path</li>
+                                <li><em>Clear expectations:</em> Easier for users to form expectation model of what it's doing</li>
+                            </ul>
+                        </div>
+                        
+                        <div style="background: var(--card-bg); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                            <h4 style="margin-top: 0;">Cons</h4>
+                            <ul style="font-size: var(--spectrum-font-size-300); line-height: 1.6; margin: 0;">
+                                <li><em>Rigid:</em> Cannot adapt to different user needs</li>
+                                <li><em>Limited:</em> One-size-fits-all approach</li>
+                                <li><em>Hard to modify:</em> Changes require pipeline redesign</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="versus-divider"></div>
+                    
+                    <div class="versus-side">
+                        <h3 style="margin-bottom: 2rem;">Orchestrator</h3>
+                        
+                        <div style="background: var(--card-bg); padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem; border: 1px solid var(--border-color);">
+                            <h4 style="margin-top: 0;">Pros</h4>
+                            <ul style="font-size: var(--spectrum-font-size-300); line-height: 1.6; margin: 0;">
+                                <li><em>Very flexible & dynamic:</em> Adapts to user requests, can skip or repeat steps as needed</li>
+                                <li><em>Extensible:</em> Easy to add new tools</li>
+                                <li><em>User-driven:</em> Responds to natural language</li>
+                            </ul>
+                        </div>
+                        
+                        <div style="background: var(--card-bg); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                            <h4 style="margin-top: 0;">Cons</h4>
+                            <ul style="font-size: var(--spectrum-font-size-300); line-height: 1.6; margin: 0;">
+                                <li><em>Error-prone:</em> Agent execution loop can fail</li>
+                                <li><em>Unpredictable:</em> Different paths each time, harder to debug</li>
+                                <li><em>Unclear capabilities:</em> User may not know what's possible</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: var(--card-bg); padding: 1.5rem; border-radius: 8px; margin-top: 2rem; text-align: center; border: 1px solid var(--border-color);">
+                    <p style="font-size: var(--spectrum-font-size-300); margin: 0; font-style: italic;">
+                        <em>The Challenge:</em> Design tools, data representations, and execution loops intelligently to get flexibility without sacrificing reliability
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Video Agent Planning -->
+        <div class="slide" id="slide9">
+            <div class="slide-content">
+                <h2>Video Agent Planning</h2>
+                
+                <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
+                    <!-- User Request -->
+                    <div style="text-align: center;">
+                        <div class="spectrum-box" style="min-width: 250px;">
+                            <div class="spectrum-box-heading">User Request</div>
+                        </div>
+                        <div class="flow-arrow" style="margin: 0.5rem 0;">↓</div>
+                    </div>
+                    
+                    <!-- Video Agent with Tool Selection -->
+                    <div style="background: var(--card-bg); padding: 1.5rem; border-radius: 10px; border: 1px solid var(--border-color);">
+                        <div style="text-align: center; margin-bottom: 1rem;">
+                            <em style="font-size: var(--spectrum-font-size-300);">Video Agent</em>
+                        </div>
+                        
+                        <!-- Available Tools -->
+                        <div style="background: var(--code-bg); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border: 1px solid var(--border-color);">
+                            <h4 style="text-align: center; margin-bottom: 0.8rem; color: var(--color-neutral-dark);">Available Tools</h4>
+                            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 0.4rem; font-size: var(--spectrum-font-size-75);">
+                                <div class="spectrum-code-box primary">get_transcript</div>
+                                <div class="spectrum-code-box primary">search_content</div>
+                                <div class="spectrum-code-box primary">detect_silence_gaps</div>
+                                <div class="spectrum-code-box primary">analyze_content</div>
+                                <div class="spectrum-code-box secondary">addClipsToTimeline</div>
+                                <div class="spectrum-code-box secondary">trimClips</div>
+                                <div class="spectrum-code-box secondary">arrangeClips</div>
+                                <div class="spectrum-code-box secondary">updateTimeline</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Different Execution Paths -->
+                        <div style="display: flex; justify-content: space-between; gap: 1.5rem;">
+                            <!-- Path 1: Frankenbite -->
+                            <div style="flex: 1; background: var(--card-bg); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                                <div style="font-weight: bold; margin-bottom: 0.8rem; color: var(--color-heading); text-align: center; font-size: var(--spectrum-font-size-100);">
+                                    "Make them say 'I hate glaze'"
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 0.3rem; font-size: var(--spectrum-font-size-75);">
+                                    <div class="spectrum-code-box primary emphasized">get_transcript</div>
+                                    <div class="spectrum-code-box primary emphasized">search_content</div>
+                                    <div class="spectrum-code-box secondary emphasized">addClipsToTimeline</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Path 2: Remove Silence -->
+                            <div style="flex: 1; background: var(--card-bg); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                                <div style="font-weight: bold; margin-bottom: 0.8rem; color: var(--color-heading); text-align: center; font-size: var(--spectrum-font-size-100);">
+                                    "Remove all silences"
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 0.3rem; font-size: var(--spectrum-font-size-75);">
+                                    <div class="spectrum-code-box primary emphasized">get_transcript</div>
+                                    <div class="spectrum-code-box primary emphasized">detect_silence_gaps</div>
+                                    <div class="spectrum-code-box secondary emphasized">trimClips</div>
+                                    <div class="spectrum-code-box secondary emphasized">updateTimeline</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Response -->
+                    <div style="text-align: center;">
+                        <div class="flow-arrow" style="margin: 0.5rem 0;">↓</div>
+                        <div class="spectrum-box" style="min-width: 250px;">
+                            <div class="spectrum-box-heading">Response</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Can We Show the Plan? -->
+        <div class="slide" id="slide10">
+            <div class="slide-content">
+                <h2>Can We Show the User the Plan?</h2>
+                
+                <div style="display: flex; flex-direction: column; gap: 2rem; margin-top: 1.5rem;">
+                    <!-- Core Question -->
+                    <div style="background: var(--card-bg); padding: 1.5rem; border-radius: 8px; text-align: center;">
+                        <p style="font-size: var(--spectrum-font-size-300); margin: 0; font-weight: bold;">
+                            What if we make the agent's planning process transparent and interactive?
+                        </p>
+                    </div>
+                    
+                    <!-- Examples Side by Side -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                        <!-- Left: Cursor Example -->
+                        <div style="text-align: center;">
+                            <h3 style="color: var(--color-heading); margin-bottom: 1rem;">Example: Cursor's Approach</h3>
+                            <img src="https://cursor.com/marketing-static/_next/image?url=https%3A%2F%2Fcdn.sanity.io%2Fimages%2F2hv88549%2Fproduction%2F01eeafec9d6c61426f2fee520aba42e2df0da508-1739x1124.png%3Fauto%3Dformat&w=3840&q=70" 
+                                 alt="Cursor showing plan to user" 
+                                 style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                            <p style="font-size: var(--spectrum-font-size-100); color: var(--color-neutral); margin-top: 0.5rem; font-style: italic;">
+                                Cursor shows its plan before execution
+                            </p>
+                        </div>
+                        
+                        <!-- Right: Video Editing Example -->
+                        <div>
+                            <h3 style="margin-bottom: 1rem;">Video Editing Plan Example</h3>
+                            <div style="background: var(--card-bg); padding: 1rem; border-radius: 8px;">
+                                <div style="background: var(--spectrum-gray-50); padding: 1rem; border-radius: 6px; font-family: monospace; font-size: var(--spectrum-font-size-75);">
+                                    <div style="color: var(--color-neutral); margin-bottom: 0.8rem;">📋 <em>Plan for "Make a rough cut of my travel videos":</em></div>
+                                    <div style="margin-left: 1rem; line-height: 1.6;">
+                                        1. 🔍 Get transcript from all travel videos<br>
+                                        2. 🎯 Classify A-roll vs B-roll content<br>
+                                        3. ✂️ Extract key moments:<br>
+                                        <div style="display: flex; gap: 0.5rem; margin: 0.5rem 0; align-items: center; flex-wrap: wrap;">
+                                            <div style="text-align: center;">
+                                                <div style="width: 60px; height: 40px; background: linear-gradient(135deg, #ff6b6b, #ffa8a8); border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: var(--spectrum-font-size-50);">Intro</div>
+                                                <div style="font-size: var(--spectrum-font-size-50); color: var(--color-neutral);">0-15s</div>
+                                            </div>
+                                            <div style="color: var(--color-neutral);">→</div>
+                                            <div style="text-align: center;">
+                                                <div style="width: 60px; height: 40px; background: linear-gradient(135deg, #4ecdc4, #7fdbda); border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: var(--spectrum-font-size-50);">Beach</div>
+                                                <div style="font-size: var(--spectrum-font-size-50); color: var(--color-neutral);">2:30-3:45</div>
+                                            </div>
+                                            <div style="color: var(--color-neutral);">→</div>
+                                            <div style="text-align: center;">
+                                                <div style="width: 60px; height: 40px; background: linear-gradient(135deg, #45b7d1, #74c0fc); border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: var(--spectrum-font-size-50);">City</div>
+                                                <div style="font-size: var(--spectrum-font-size-50); color: var(--color-neutral);">5:20-6:10</div>
+                                            </div>
+                                            <div style="color: var(--color-neutral);">→</div>
+                                            <div style="text-align: center;">
+                                                <div style="width: 60px; height: 40px; background: linear-gradient(135deg, #96ceb4, #c8e6c9); border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: var(--spectrum-font-size-50);">Food</div>
+                                                <div style="font-size: var(--spectrum-font-size-50); color: var(--color-neutral);">8:15-9:00</div>
+                                            </div>
+                                        </div>
+                                        4. 🎬 Arrange clips with transitions<br>
+                                        <br>
+                                        <span style="color: var(--color-heading);">👤 <em>User:</em> Can you add more beach scenes?</span><br>
+                                        <span style="color: var(--color-subheading);">🤖 <em>Agent:</em> Found 3 more beach clips, adding to timeline</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Benefits (Concise) -->
+                    <div style="background: var(--card-bg); padding: 1rem; border-radius: 8px; text-align: center;">
+                        <p style="font-size: var(--spectrum-font-size-300); margin: 0; font-weight: bold;">
+                            <em>Benefits:</em> Transparency & Control • Helps users learn capabilities • Iterative & Fun • Catch issues early
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Analysis Tools: General vs Specialized -->
+        <div class="slide" id="slide11">
+            <div class="slide-content">
+                <h2>Analysis Tools: General vs Specialized</h2>
+                
+                <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
+                    
+                    <!-- Example: Search Tools -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                        <!-- Specialized Approach -->
+                        <div>
+                            <h3 style="color: var(--color-emphasis); margin-bottom: 0.8rem; font-size: 1.2rem;">Too Specialized</h3>
+                            
+                            <div style="background: var(--card-bg); padding: 0.8rem; border-radius: 6px; margin-bottom: 0.5rem; font-size: var(--spectrum-font-size-75);">
+                                <h4 style="font-size: var(--spectrum-font-size-100); margin: 0 0 0.5rem 0;">Multiple specialized tools</h4>
+                                <div style="display: flex; flex-direction: column; gap: 0.3rem;">
+                                    <code>search_words(["I", "hate", "glaze"])</code>
+                                    <code>search_silence(min_duration=0.5)</code>
+                                    <code>search_speakers("Speaker 1")</code>
+                                    <code>search_timestamps(start=10, end=20)</code>
+                                    <code>search_emotions("happy")</code>
+                                    <span style="color: var(--color-neutral);">...</span>
+                                </div>
+                            </div>
+                            
+                            <p style="font-size: var(--spectrum-font-size-100); color: var(--color-neutral); font-style: italic; margin: 0.5rem 0 0 0;">
+                                Problem: Agent must choose from many similar tools
+                            </p>
+                        </div>
+                        
+                        <!-- General Approach -->
+                        <div>
+                            <h3 style="color: var(--color-subheading); margin-bottom: 0.8rem; font-size: 1.2rem;">Generally Applicable</h3>
+                            
+                            <div style="background: var(--card-bg); padding: 0.8rem; border-radius: 6px; margin-bottom: 0.5rem; font-size: var(--spectrum-font-size-75);">
+                                <h4 style="font-size: var(--spectrum-font-size-100); margin: 0 0 0.5rem 0;"><code>search_content</code></h4>
+                                <div style="display: flex; flex-direction: column; gap: 0.3rem;">
+                                    <code>search_content({"type": "words", "query": ["I", "hate", "glaze"]})</code>
+                                    <code>search_content({"type": "silence", "min_duration": 0.5})</code>
+                                    <code>search_content({"type": "speaker", "speaker_id": "Speaker 1"})</code>
+                                </div>
+                            </div>
+                            
+                            <p style="font-size: var(--spectrum-font-size-100); color: var(--color-neutral); font-style: italic; margin: 0.5rem 0 0 0;">
+                                Benefit: Agent planning is simpler - one tool, different parameters
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Visual Illustration -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 0.5rem;">
+                        <!-- Too Many Tools -->
+                        <div style="text-align: center;">
+                            <h4 style="color: var(--color-emphasis); margin-bottom: 0.5rem; font-size: var(--spectrum-font-size-100);">Too Many Tools</h4>
+                            <img src="https://i0.wp.com/toolguyd.com/blog/wp-content/uploads/2011/12/ToolGuyd-Partial-Sears-Tool-Collection.jpg?resize=550%2C318&ssl=1" 
+                                 alt="Many specialized tools" 
+                                 style="max-width: 100%; height: 120px; object-fit: cover; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                            <p style="font-size: var(--spectrum-font-size-75); color: var(--color-neutral); margin-top: 0.3rem; font-style: italic;">
+                                Agent struggles to choose
+                            </p>
+                        </div>
+                        
+                        <!-- One Flexible Tool -->
+                        <div style="text-align: center;">
+                            <h4 style="color: var(--color-subheading); margin-bottom: 0.5rem; font-size: var(--spectrum-font-size-100);">One Flexible Tool</h4>
+                            <img src="https://m.media-amazon.com/images/I/51os8SokCCL._UF894,1000_QL80_.jpg" 
+                                 alt="One screwdriver with interchangeable bits" 
+                                 style="max-width: 100%; height: 120px; object-fit: cover; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                            <p style="font-size: var(--spectrum-font-size-75); color: var(--color-neutral); margin-top: 0.3rem; font-style: italic;">
+                                One tool, different parameters
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Data Models Enable Different Analysis -->
+        <div class="slide" id="slide12">
+            <div class="slide-content">
+                <h2>Data Models Enable Different Analysis</h2>
+                
+                <div style="display: flex; flex-direction: column; gap: 1.5rem; margin-top: 1.5rem;">
+                    <!-- Good Data Models -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                        <!-- Rich Transcript -->
+                        <div style="background: var(--card-bg); padding: 1rem; border-radius: 8px;">
+                            <h4 style="color: var(--color-subheading); margin-bottom: 0.8rem;">Rich Transcript Model</h4>
+                            <pre style="font-size: 0.75rem; background: var(--spectrum-gray-50); padding: 0.6rem; border-radius: 4px; margin-bottom: 0.8rem; font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace; white-space: pre; overflow-x: auto;"><code style="font-family: inherit; font-size: inherit; line-height: inherit; color: inherit; white-space: inherit; display: block;">{
+  "text": "I really love this product",
+  "start_ms": 1200, "end_ms": 3400,
+  "speaker": "Speaker 1",
+  "sentiment": "positive",
+  "keywords": ["love", "product"]
+}</code></pre>
+                            <p style="font-size: var(--spectrum-font-size-100); color: var(--color-neutral); margin: 0;">
+                                <em>Enables:</em> Content search, sentiment analysis, speaker identification
+                            </p>
+                        </div>
+                        
+                        <!-- Visual Segments -->
+                        <div style="background: var(--card-bg); padding: 1rem; border-radius: 8px;">
+                            <h4 style="color: var(--color-subheading); margin-bottom: 0.8rem;">Visual Segments Model</h4>
+                            <pre style="font-size: var(--spectrum-font-size-50); background: var(--spectrum-gray-50); padding: 0.6rem; border-radius: 4px; margin-bottom: 0.8rem;"><code>{
+  "start_ms": 5000, "end_ms": 8000,
+  "caption": "Person holding coffee cup",
+  "objects": ["person", "coffee", "cup"],
+  "scene": "kitchen", "lighting": "bright"
+}</code></pre>
+                            <p style="font-size: var(--spectrum-font-size-100); color: var(--color-neutral); margin: 0;">
+                                <em>Enables:</em> Visual search, scene matching, object detection
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Bad Data Model -->
+                    <div style="background: var(--card-bg); padding: 1rem; border-radius: 8px; border-left: 4px solid var(--color-emphasis);">
+                        <h4 style="color: var(--color-emphasis); margin-bottom: 0.8rem;">Poor Data Model: Clip ID Arrays</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                            <div>
+                                <pre style="font-size: 0.75rem; background: var(--spectrum-gray-50); padding: 0.6rem; border-radius: 4px; margin-bottom: 0.8rem; font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace; white-space: pre; overflow-x: auto;"><code style="font-family: inherit; font-size: inherit; line-height: inherit; color: inherit; white-space: inherit; display: block;">// Timeline representation
+{
+  "timeline": ["clip_001", "clip_045", "clip_023", "clip_067"],
+  "total_duration": 120000
+}</code></pre>
+                                <p style="font-size: var(--spectrum-font-size-100); color: var(--color-neutral); margin: 0;">
+                                    <em>Problem:</em> Agent can't analyze content without multiple lookup steps
+                                </p>
+                            </div>
+                            <div>
+                                <pre style="font-size: 0.75rem; background: var(--spectrum-gray-50); padding: 0.6rem; border-radius: 4px; margin-bottom: 0.8rem; font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace; white-space: pre; overflow-x: auto;"><code style="font-family: inherit; font-size: inherit; line-height: inherit; color: inherit; white-space: inherit; display: block;">// Agent needs multiple steps:
+1. get_clip_details("clip_001")
+2. get_clip_details("clip_045") 
+3. get_clip_details("clip_023")
+4. get_clip_details("clip_067")
+// Then analyze content...</code></pre>
+                                <p style="font-size: var(--spectrum-font-size-100); color: var(--color-neutral); margin: 0;">
+                                    <em>Result:</em> Complex multi-step analysis, prone to errors
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Key Principle -->
+                    <div style="background: var(--card-bg); padding: 1rem; border-radius: 8px; text-align: center;">
+                        <p style="font-size: var(--spectrum-font-size-300); margin: 0; font-weight: bold;">
+                            Rich data models enable direct analysis • Poor models require multiple lookup steps
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 13: Dynamic Tooling & Data Transformation -->
+        <div class="slide" id="slide13">
+            <div class="slide-content">
+                <h2>Dynamic Tooling & Data Transformation</h2>
+                
+                <div style="display: flex; flex-direction: column; gap: 1.5rem; margin-top: 1.5rem;">
+                    <!-- Core Concept -->
+                    <div style="background: var(--card-bg); padding: 1rem; border-radius: 8px; text-align: center;">
+                        <p style="font-size: 1.2rem; margin: 0; font-weight: bold;">
+                            Agent can dynamically create new analysis capabilities and transform data representations
+                        </p>
+                    </div>
+                    
+                    <!-- Examples -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                        <!-- Dynamic Analysis -->
+                        <div style="background: var(--card-bg); padding: 1rem; border-radius: 8px;">
+                            <h4 style="color: var(--color-subheading); margin-bottom: 0.8rem;">Dynamic Visual Analysis</h4>
+                            <div style="background: var(--spectrum-gray-50); padding: 0.8rem; border-radius: 4px; margin-bottom: 0.8rem;">
+                                <div style="font-size: var(--spectrum-font-size-100); margin-bottom: 0.5rem; font-weight: bold;">Agent Planning:</div>
+                                <div style="font-size: var(--spectrum-font-size-75); line-height: 1.4;">
+                                    1. <code>sample_thumbnails(video, interval=5s)</code><br>
+                                    2. <code>send_to_vlm(thumbnails, "Describe emotions")</code><br>
+                                    3. <code>analyze_results(vlm_output)</code>
+                                </div>
+                            </div>
+                            <p style="font-size: var(--spectrum-font-size-100); color: var(--color-neutral); margin: 0;">
+                                <em>Result:</em> New emotion analysis capability created on-demand
+                            </p>
+                        </div>
+                        
+                        <!-- Data Transformation -->
+                        <div style="background: var(--card-bg); padding: 1rem; border-radius: 8px;">
+                            <h4 style="color: var(--color-emphasis); margin-bottom: 0.8rem;">Dynamic Data Transformation</h4>
+                            <div style="background: var(--spectrum-gray-50); padding: 0.8rem; border-radius: 4px; margin-bottom: 0.8rem;">
+                                <div style="font-size: var(--spectrum-font-size-100); margin-bottom: 0.5rem; font-weight: bold;">Agent Planning:</div>
+                                <div style="font-size: var(--spectrum-font-size-75); line-height: 1.4;">
+                                    1. <code>get_transcript(word_level=true)</code><br>
+                                    2. <code>transform_to_sentences(word_data)</code><br>
+                                    3. <code>add_sentiment_scores(sentences)</code>
+                                </div>
+                            </div>
+                            <p style="font-size: var(--spectrum-font-size-100); color: var(--color-neutral); margin: 0;">
+                                <em>Result:</em> Data transformed to enable sentiment analysis
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Agent Planning Integration -->
+                    <div style="background: var(--card-bg); padding: 1rem; border-radius: 8px; border-left: 4px solid var(--color-heading);">
+                        <h4 style="color: var(--color-heading); margin-bottom: 0.8rem;">Integration with Agent Planning</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                            <div>
+                                <div style="font-size: var(--spectrum-font-size-100); font-weight: bold; margin-bottom: 0.5rem;">Available Tools Include:</div>
+                                <div style="font-size: var(--spectrum-font-size-75); line-height: 1.4;">
+                                    • <code>sample_thumbnails</code><br>
+                                    • <code>send_to_vlm</code><br>
+                                    • <code>transform_data</code><br>
+                                    • <code>apply_algorithm</code><br>
+                                    • <code>aggregate_results</code>
+                                </div>
+                            </div>
+                            <div>
+                                <div style="font-size: var(--spectrum-font-size-100); font-weight: bold; margin-bottom: 0.5rem;">Agent Can:</div>
+                                <div style="font-size: var(--spectrum-font-size-75); line-height: 1.4;">
+                                    • Chain tools to create new capabilities<br>
+                                    • Transform data representations<br>
+                                    • Adapt to novel analysis requests<br>
+                                    • Combine multiple data sources
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Key Benefit -->
+                    <div style="background: var(--card-bg); padding: 1rem; border-radius: 8px; text-align: center;">
+                        <p style="font-size: var(--spectrum-font-size-300); margin: 0; font-weight: bold;">
+                            Flexibility: Agent not limited to pre-built analysis • Can create new capabilities dynamically
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 14: Making Frontend Actions Less Error-Prone -->
+        <div class="slide" id="slide14">
+            <div class="slide-content">
+                <h2>Making Frontend Actions Less Error-Prone</h2>
+                
+                <div style="display: flex; flex-direction: column; gap: 2rem; margin-top: 2rem;">
+                    <div class="problem" style="background: var(--card-bg); padding: 1.5rem; border-radius: 8px;">
+                        <h3 style="color: var(--color-emphasis);">The Problem: Sequential Operations</h3>
+                        <p style="font-size: 1.2rem;">Agent must track state and do math between calls:</p>
+                        <pre style="font-size: 0.9rem; background: var(--spectrum-gray-50); padding: 1rem; border-radius: 4px; margin: 1rem 0; font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace; white-space: pre; overflow-x: auto;"><code style="font-family: inherit; font-size: inherit; line-height: inherit; color: inherit; white-space: inherit; display: block;">1. addClipToTimeline("I", position: 0)        // Agent thinks: "Timeline = 150ms"
+2. addClipToTimeline("hate", position: 150)    // Agent thinks: "Timeline = 570ms" 
+3. addClipToTimeline("glaze", position: 570)   // Math error = broken timeline</code></pre>
+                        <p style="font-size: var(--spectrum-font-size-300); color: var(--color-neutral); font-style: italic;">
+                            Problem: Agent prone to calculation errors and state tracking mistakes
+                        </p>
+                    </div>
+                    
+                    <div class="solution" style="background: var(--card-bg); padding: 1.5rem; border-radius: 8px;">
+                        <h3 style="color: var(--color-subheading);">Better Approach: Batch Operations</h3>
+                        <p style="font-size: 1.2rem;">Agent declares intent, frontend handles execution:</p>
+                        <pre style="font-size: 0.9rem; background: var(--spectrum-gray-50); padding: 1rem; border-radius: 4px; margin: 1rem 0; font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace; white-space: pre; overflow-x: auto;"><code style="font-family: inherit; font-size: inherit; line-height: inherit; color: inherit; white-space: inherit; display: block;">addMultipleClipsToTimeline({
+  clips: [
+    { fileId: "video-1", trimStartMs: 1200, trimEndMs: 1350 },  // "I"
+    { fileId: "video-1", trimStartMs: 45200, trimEndMs: 45620 }, // "hate"  
+    { fileId: "video-1", trimStartMs: 67800, trimEndMs: 68200 }  // "glaze"
+  ]
+})</code></pre>
+                        <p style="font-size: var(--spectrum-font-size-300); color: var(--color-neutral); font-style: italic;">
+                            Benefit: Deterministic code handles complex positioning logic, reducing errors
+                        </p>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Slide navigation functionality
+        let currentSlide = 1;
+        const totalSlides = document.querySelectorAll('.slide').length;
+
+        // URL navigation functionality
+        function getSlideFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const slideParam = urlParams.get('slide');
+            
+            if (slideParam) {
+                const slideNum = parseInt(slideParam);
+                if (slideNum >= 1 && slideNum <= totalSlides) {
+                    return slideNum;
+                }
+            }
+            
+            // Check for hash-based navigation (#slide5 or #5)
+            const hash = window.location.hash.substring(1);
+            if (hash) {
+                let slideNum;
+                if (hash.startsWith('slide')) {
+                    slideNum = parseInt(hash.substring(5));
+                } else {
+                    slideNum = parseInt(hash);
+                }
+                if (slideNum >= 1 && slideNum <= totalSlides) {
+                    return slideNum;
+                }
+            }
+            
+            return 1;
+        }
+
+        // Update URL when slide changes
+        function updateURL(slideNum) {
+            const newURL = new URL(window.location);
+            newURL.searchParams.set('slide', slideNum);
+            window.history.replaceState({}, '', newURL);
+        }
+
+        // Listen for browser back/forward navigation
+        window.addEventListener('popstate', function() {
+            const targetSlide = getSlideFromURL();
+            if (targetSlide !== currentSlide) {
+                currentSlide = targetSlide;
+                showSlide(currentSlide);
+            }
+        });
+
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+            const progressBar = document.getElementById('progressBar');
+            
+            if (n > totalSlides) currentSlide = 1;
+            if (n < 1) currentSlide = totalSlides;
+            
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[currentSlide - 1].classList.add('active');
+            
+            // Update progress bar
+            const progress = (currentSlide / totalSlides) * 100;
+            progressBar.style.width = progress + '%';
+            
+            // Update URL
+            updateURL(currentSlide);
+        }
+
+        function nextSlide() {
+            currentSlide++;
+            showSlide(currentSlide);
+        }
+
+        function prevSlide() {
+            currentSlide--;
+            showSlide(currentSlide);
+        }
+
+        // Event listeners
+        document.getElementById('nextArrow').addEventListener('click', (e) => {
+            e.preventDefault();
+            nextSlide();
+        });
+
+        document.getElementById('prevArrow').addEventListener('click', (e) => {
+            e.preventDefault();
+            prevSlide();
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                prevSlide();
+            } else if (e.key === 'd' || e.key === 'D') {
+                // Toggle theme with 'd' key
+                themeToggle.click();
+            }
+        });
+
+        // Initialize from URL or default to slide 1
+        const initialSlide = getSlideFromURL();
+        currentSlide = initialSlide;
+        showSlide(currentSlide);
+
+        // Generic skip to slide functionality
+        document.querySelectorAll('.skip-to-slide').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetSlide = parseInt(link.getAttribute('data-slide'));
+                if (targetSlide >= 1 && targetSlide <= totalSlides) {
+                    currentSlide = targetSlide;
+                    showSlide(currentSlide);
+                }
+            });
+        });
+
+        // Quote Animation Functionality
+        let quoteTransformed = false;
+        const quoteContainer = document.getElementById('quoteContainer');
+        const attribution = document.getElementById('attribution');
+        const source = document.getElementById('source');
+        
+        if (quoteContainer) {
+            quoteContainer.addEventListener('click', () => {
+                const transitionWords = document.querySelectorAll('.transition-word');
+                
+                // Capture the current state before toggling
+                const shouldTransform = !quoteTransformed;
+                
+                transitionWords.forEach((span) => {
+                    const original = span.getAttribute('data-original');
+                    const newText = span.getAttribute('data-new');
+                    
+                    // Fade out the word
+                    span.style.opacity = '0';
+                    
+                    setTimeout(() => {
+                        if (shouldTransform) {
+                            span.textContent = newText;
+                            // Apply bold emphasis to transformed words
+                            span.style.fontWeight = 'bold';
+                        } else {
+                            span.textContent = original;
+                            // Reset to normal weight
+                            span.style.fontWeight = 'normal';
+                        }
+                        
+                        // Fade back in
+                        span.style.opacity = '1';
+                    }, 300);
+                });
+                
+                // Hide/show attribution and source
+                if (shouldTransform) {
+                    // Hide attribution when transformed (no longer John Lasseter's quote)
+                    attribution.style.opacity = '0';
+                    source.style.opacity = '0';
+                } else {
+                    // Show attribution when returning to original
+                    attribution.style.opacity = '0.8';
+                    source.style.opacity = '1';
+                }
+                
+                // Toggle state after setting up all the animations
+                quoteTransformed = !quoteTransformed;
+            });
+        }
+
+        // Theme Toggle Functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const sunIcon = document.getElementById('sunIcon');
+        const moonIcon = document.getElementById('moonIcon');
+        const htmlElement = document.documentElement;
+
+        // Check for saved theme preference or default to light mode
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        htmlElement.setAttribute('data-theme', currentTheme);
+        updateThemeIcons(currentTheme);
+
+        function updateThemeIcons(theme) {
+            if (theme === 'dark') {
+                sunIcon.style.display = 'none';
+                moonIcon.style.display = 'block';
+            } else {
+                sunIcon.style.display = 'block';
+                moonIcon.style.display = 'none';
+            }
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = htmlElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            htmlElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcons(newTheme);
+        });
+
+        // Expandable Items Functionality (for Slide 5)
+        document.querySelectorAll('.expandable-item').forEach(item => {
+            const header = item.querySelector('.expandable-header');
+            const content = item.querySelector('.expandable-content');
+            const icon = item.querySelector('.expand-icon');
+            
+            header.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent slide navigation
+                
+                const isExpanded = content.style.display === 'block';
+                
+                if (isExpanded) {
+                    // Collapse
+                    content.style.display = 'none';
+                    if (icon) {
+                        icon.style.transform = 'rotate(0deg)';
+                    }
+                    if (item.style.background) {
+                        item.style.background = 'var(--card-bg)';
+                    }
+                } else {
+                    // Expand
+                    content.style.display = 'block';
+                    if (icon) {
+                        icon.style.transform = 'rotate(90deg)';
+                    }
+                    if (item.style.background) {
+                        item.style.background = 'var(--code-bg)';
+                    }
+                    
+                    // Restart GIF animations when expanded
+                    const gifs = content.querySelectorAll('img[src$=".gif"]');
+                    gifs.forEach(gif => {
+                        const src = gif.src;
+                        gif.src = '';
+                        gif.src = src;
+                    });
+                }
+            });
+            
+            // Add hover effect
+            item.addEventListener('mouseenter', () => {
+                if (content.style.display !== 'block' && item.style.background) {
+                    item.style.background = 'var(--code-bg)';
+                }
+            });
+            
+            item.addEventListener('mouseleave', () => {
+                if (content.style.display !== 'block') {
+                    item.style.background = 'var(--card-bg)';
+                }
+            });
+        });
+
+        // Modal functionality for artifact questions
+        document.querySelectorAll('.modal-trigger-item').forEach(trigger => {
+            trigger.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent slide navigation
+                const modalId = trigger.getAttribute('data-modal');
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    modal.style.display = 'flex';
+                    
+                    // Restart GIF animations when modal opens
+                    const gifs = modal.querySelectorAll('img[src$=".gif"]');
+                    gifs.forEach(gif => {
+                        const src = gif.src;
+                        gif.src = '';
+                        gif.src = src;
+                    });
+                }
+            });
+        });
+
+        // Close modal functionality
+        document.querySelectorAll('.artifact-modal').forEach(modal => {
+            // Close button
+            const closeBtn = modal.querySelector('.modal-close');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    modal.style.display = 'none';
+                });
+            }
+            
+            // Click outside modal content to close
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+            
+            // Prevent modal content clicks from closing
+            const modalContent = modal.querySelector('.modal-content');
+            if (modalContent) {
+                modalContent.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                });
+            }
+        });
+
+        // Make GIFs in modals clickable to restart animation
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('clickable-gif')) {
+                e.stopPropagation();
+                const gif = e.target;
+                const src = gif.src;
+                gif.src = '';
+                gif.src = src;
+            }
+        });
+
+        // Carousel for Slide 3.6 (Examples of Intermediate Artifacts)
+        let currentCarouselIndex = 0;
+        const carouselItems = document.querySelectorAll('.carousel-item');
+        const carouselDots = document.querySelectorAll('.carousel-dot');
+        
+        function showCarouselItem(index) {
+            carouselItems.forEach((item, i) => {
+                if (i === index) {
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateX(0)';
+                    item.style.zIndex = '1';
+                } else if (i < index) {
+                    item.style.opacity = '0';
+                    item.style.transform = 'translateX(-100%)';
+                    item.style.zIndex = '0';
+                } else {
+                    item.style.opacity = '0';
+                    item.style.transform = 'translateX(100%)';
+                    item.style.zIndex = '0';
+                }
+            });
+            
+            carouselDots.forEach((dot, i) => {
+                dot.style.opacity = i === index ? '1' : '0.3';
+            });
+            
+            currentCarouselIndex = index;
+        }
+        
+        // Add click handlers to carousel dots
+        carouselDots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                showCarouselItem(index);
+            });
+        });
+        
+        // Click on carousel area to advance
+        const artifactCarousel = document.getElementById('artifactCarousel');
+        if (artifactCarousel) {
+            artifactCarousel.addEventListener('click', () => {
+                const nextIndex = (currentCarouselIndex + 1) % carouselItems.length;
+                showCarouselItem(nextIndex);
+            });
+        }
+
+        // Transition Animation for Slide 3.5 (Iterating with Agents → Intermediate Artifacts)
+        let transitionState = false;
+        const transitionText = document.getElementById('transitionText');
+        const middleText1 = document.getElementById('middleText1');
+        const middleText2 = document.getElementById('middleText2');
+        const transitionHint = document.getElementById('transitionHint');
+        const definitionSection = document.getElementById('definitionSection');
+        
+        if (transitionText && middleText1 && middleText2 && definitionSection) {
+            // Add transition styles for smooth animation
+            middleText1.style.transition = 'all 0.6s ease-in-out';
+            middleText2.style.transition = 'all 0.6s ease-in-out';
+            middleText1.style.display = 'inline-block';
+            middleText2.style.display = 'inline-block';
+            
+            // Function to perform the transition
+            function performTransition() {
+                // Slide up and fade out
+                middleText1.style.opacity = '0';
+                middleText2.style.opacity = '0';
+                middleText1.style.transform = 'translateY(-20px)';
+                middleText2.style.transform = 'translateY(-20px)';
+                
+                // Wait for fade out, then change text
+                setTimeout(() => {
+                    if (!transitionState) {
+                        // Change to "Intermediate Artifacts"
+                        middleText1.textContent = 'ntermediate';
+                        middleText2.textContent = 'rtifacts';
+                    } else {
+                        // Change back to "Iterating with Agents"
+                        middleText1.textContent = 'terating with';
+                        middleText2.textContent = 'gents';
+                    }
+                    
+                    // Reset position below for slide-in effect
+                    middleText1.style.transform = 'translateY(20px)';
+                    middleText2.style.transform = 'translateY(20px)';
+                    
+                    // Small delay then slide in and fade in
+                    setTimeout(() => {
+                        middleText1.style.opacity = '1';
+                        middleText2.style.opacity = '1';
+                        middleText1.style.transform = 'translateY(0)';
+                        middleText2.style.transform = 'translateY(0)';
+                    }, 50);
+                    
+                    transitionState = !transitionState;
+                    
+                    // Show/hide definition based on state
+                    if (transitionState) {
+                        // Show definition for "Intermediate Artifacts"
+                        definitionSection.style.opacity = '1';
+                        definitionSection.style.pointerEvents = 'auto';
+                        transitionHint.textContent = '(Click to return)';
+                    } else {
+                        // Hide definition for "Iterating with Agents"
+                        definitionSection.style.opacity = '0';
+                        definitionSection.style.pointerEvents = 'none';
+                        transitionHint.textContent = '(Click to animate)';
+                    }
+                }, 600);
+            }
+            
+            // Click handler for the entire text area
+            transitionText.addEventListener('click', performTransition);
+            
+            // Also make the hint clickable
+            if (transitionHint) {
+                transitionHint.addEventListener('click', () => {
+                    performTransition();
+                });
+            }
+        }
+
+        // ============================================
+        // Password Protection
+        // ============================================
+        const CORRECT_PASSWORD = "agents2025"; // Change this to your desired password!
+
+        // Hide main content initially
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if already authenticated in this session
+            if (sessionStorage.getItem('authenticated') === 'true') {
+                document.getElementById('password-overlay').style.display = 'none';
+                document.querySelector('.presentation').classList.remove('content-hidden');
+            } else {
+                document.querySelector('.presentation').classList.add('content-hidden');
+                document.getElementById('password-input').focus();
+            }
+        });
+
+        function checkPassword() {
+            const input = document.getElementById('password-input');
+            const error = document.getElementById('password-error');
+            
+            if (input.value === CORRECT_PASSWORD) {
+                // Correct password
+                sessionStorage.setItem('authenticated', 'true');
+                document.getElementById('password-overlay').style.display = 'none';
+                document.querySelector('.presentation').classList.remove('content-hidden');
+                error.textContent = '';
+            } else {
+                // Wrong password
+                error.textContent = '❌ Incorrect passphrase. Please try again.';
+                input.value = '';
+                input.focus();
+            }
+        }
+
+        // Allow Enter key to submit
+        document.getElementById('password-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
+        });
+    </script>
+</body>
+</html>
