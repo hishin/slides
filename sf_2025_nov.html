@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SF 2025 November Presentation</title>
+    <link rel="stylesheet" href="https://use.typekit.net/mqk3dyg.css">
+    
+    <link rel="stylesheet" href="styles.css">
+    
+    <style>
+        /* Hide scrollbar for transcript code block */
+        .carousel-item pre::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Password protection overlay */
+        #password-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1473E6, #9256D9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        #password-box {
+            background: white;
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            text-align: center;
+            max-width: 400px;
+        }
+
+        #password-box h2 {
+            margin-bottom: 1rem;
+            color: #1473E6;
+        }
+
+        #password-box input {
+            width: 100%;
+            padding: 0.75rem;
+            margin: 1rem 0;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        #password-box button {
+            width: 100%;
+            padding: 0.75rem;
+            background: #1473E6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        #password-box button:hover {
+            background: #9256D9;
+        }
+
+        #password-error {
+            color: #d32f2f;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            min-height: 1.5rem;
+        }
+
+        .content-hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Password Protection Overlay -->
+    <div id="password-overlay">
+        <div id="password-box">
+            <h2>🔒 Protected Content</h2>
+            <p>Please enter the passphrase to view this presentation</p>
+            <input type="password" id="password-input" placeholder="Enter passphrase" autocomplete="off" />
+            <button onclick="checkPassword()">Submit</button>
+            <div id="password-error"></div>
+        </div>
+    </div>
+
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+    
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z"/>
+        </svg>
+        <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="display: none;">
+            <path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z"/>
+        </svg>
+    </button>
+    
+    <div class="presentation" id="presentation">
+        <!-- Navigation arrows -->
+        <div class="nav-arrows">
+            <a href="#" class="arrow prev" id="prevArrow">
+                <svg width="18" height="18" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M22.5 9L13.5 18L22.5 27" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
+            <a href="#" class="arrow next" id="nextArrow">
+                <svg width="18" height="18" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M13.5 9L22.5 18L13.5 27" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
+        </div>
+        
+        <!-- Slide 1: Title -->
+        <div class="slide active" id="slide1" style="background: linear-gradient(135deg, var(--slide1-gradient-start), var(--slide1-gradient-end));">
+            <h1 class="animated-title">Agentic Interactions for Video Editing</h1>
+            <p class="slide-subtitle" style="color: var(--dark); margin-top: 0.5rem;">November, 2025. San Francisco</p>
+            <p class="slide-subtitle" style="color: var(--dark); margin-top: 3rem;">Mackenzie Leake, Valentina Shin</p>
+        </div>
+
+        <!-- Add more slides here -->
+
+    </div>
+
+    <script>
+        // Slide navigation functionality
+        let currentSlide = 1;
+        const totalSlides = document.querySelectorAll('.slide').length;
+
+        // URL navigation functionality
+        function getSlideFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const slideParam = urlParams.get('slide');
+            
+            if (slideParam) {
+                const slideNum = parseInt(slideParam);
+                if (slideNum >= 1 && slideNum <= totalSlides) {
+                    return slideNum;
+                }
+            }
+            
+            // Check for hash-based navigation (#slide5 or #5)
+            const hash = window.location.hash.substring(1);
+            if (hash) {
+                let slideNum;
+                if (hash.startsWith('slide')) {
+                    slideNum = parseInt(hash.substring(5));
+                } else {
+                    slideNum = parseInt(hash);
+                }
+                if (slideNum >= 1 && slideNum <= totalSlides) {
+                    return slideNum;
+                }
+            }
+            
+            return 1;
+        }
+
+        // Update URL when slide changes
+        function updateURL(slideNum) {
+            const newURL = new URL(window.location);
+            newURL.searchParams.set('slide', slideNum);
+            window.history.replaceState({}, '', newURL);
+        }
+
+        // Listen for browser back/forward navigation
+        window.addEventListener('popstate', function() {
+            const targetSlide = getSlideFromURL();
+            if (targetSlide !== currentSlide) {
+                currentSlide = targetSlide;
+                showSlide(currentSlide);
+            }
+        });
+
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+            const progressBar = document.getElementById('progressBar');
+            
+            if (n > totalSlides) currentSlide = 1;
+            if (n < 1) currentSlide = totalSlides;
+            
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[currentSlide - 1].classList.add('active');
+            
+            // Scroll to the slide
+            slides[currentSlide - 1].scrollIntoView({ behavior: 'smooth', block: 'start' });
+            
+            // Update progress bar
+            const progress = (currentSlide / totalSlides) * 100;
+            progressBar.style.width = progress + '%';
+            
+            // Update URL
+            updateURL(currentSlide);
+        }
+
+        function nextSlide() {
+            const slides = document.querySelectorAll('.slide');
+            if (currentSlide < totalSlides) {
+                currentSlide++;
+                showSlide(currentSlide);
+            }
+        }
+
+        function prevSlide() {
+            const slides = document.querySelectorAll('.slide');
+            if (currentSlide > 1) {
+                currentSlide--;
+                showSlide(currentSlide);
+            }
+        }
+
+        // Event listeners
+        document.getElementById('nextArrow').addEventListener('click', (e) => {
+            e.preventDefault();
+            nextSlide();
+        });
+
+        document.getElementById('prevArrow').addEventListener('click', (e) => {
+            e.preventDefault();
+            prevSlide();
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'ArrowDown') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                prevSlide();
+            } else if (e.key === 'd' || e.key === 'D') {
+                // Toggle theme with 'd' key
+                themeToggle.click();
+            }
+        });
+
+        // Scroll listener to update progress bar and current slide tracker
+        const presentation = document.getElementById('presentation');
+        let scrollTimeout;
+        
+        presentation.addEventListener('scroll', () => {
+            const slides = document.querySelectorAll('.slide');
+            const scrollPosition = presentation.scrollTop;
+            const viewportMiddle = scrollPosition + (window.innerHeight / 2);
+            
+            // Update progress bar in real-time
+            const maxScroll = presentation.scrollHeight - presentation.clientHeight;
+            const scrollPercentage = (scrollPosition / maxScroll) * 100;
+            document.getElementById('progressBar').style.width = scrollPercentage + '%';
+            
+            // Debounce slide number update to avoid too many updates
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                // Determine which slide is currently in view based on viewport middle
+                let foundSlide = false;
+                slides.forEach((slide, index) => {
+                    const slideTop = slide.offsetTop;
+                    const slideBottom = slideTop + slide.offsetHeight;
+                    
+                    if (viewportMiddle >= slideTop && viewportMiddle < slideBottom) {
+                        const newSlide = index + 1;
+                        if (newSlide !== currentSlide) {
+                            currentSlide = newSlide;
+                            slides.forEach(s => s.classList.remove('active'));
+                            slide.classList.add('active');
+                            updateURL(currentSlide);
+                        }
+                        foundSlide = true;
+                    }
+                });
+            }, 150);
+        });
+
+        // Initialize from URL or default to slide 1
+        const initialSlide = getSlideFromURL();
+        currentSlide = initialSlide;
+        showSlide(currentSlide);
+
+        // Generic skip to slide functionality
+        document.querySelectorAll('.skip-to-slide').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetSlide = parseInt(link.getAttribute('data-slide'));
+                if (targetSlide >= 1 && targetSlide <= totalSlides) {
+                    currentSlide = targetSlide;
+                    showSlide(currentSlide);
+                }
+            });
+        });
+
+        // Theme Toggle Functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const sunIcon = document.getElementById('sunIcon');
+        const moonIcon = document.getElementById('moonIcon');
+        const htmlElement = document.documentElement;
+
+        // Check for saved theme preference or default to light mode
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        htmlElement.setAttribute('data-theme', currentTheme);
+        updateThemeIcons(currentTheme);
+
+        function updateThemeIcons(theme) {
+            if (theme === 'dark') {
+                sunIcon.style.display = 'none';
+                moonIcon.style.display = 'block';
+            } else {
+                sunIcon.style.display = 'block';
+                moonIcon.style.display = 'none';
+            }
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = htmlElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            htmlElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcons(newTheme);
+        });
+
+        // ============================================
+        // Password Protection
+        // ============================================
+        const CORRECT_PASSWORD = "AwesomeHCI2025";
+
+        // Hide main content initially
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if already authenticated in this session
+            if (sessionStorage.getItem('authenticated') === 'true') {
+                document.getElementById('password-overlay').style.display = 'none';
+                document.querySelector('.presentation').classList.remove('content-hidden');
+            } else {
+                document.querySelector('.presentation').classList.add('content-hidden');
+                document.getElementById('password-input').focus();
+            }
+        });
+
+        function checkPassword() {
+            const input = document.getElementById('password-input');
+            const error = document.getElementById('password-error');
+            
+            if (input.value === CORRECT_PASSWORD) {
+                // Correct password
+                sessionStorage.setItem('authenticated', 'true');
+                document.getElementById('password-overlay').style.display = 'none';
+                document.querySelector('.presentation').classList.remove('content-hidden');
+                error.textContent = '';
+            } else {
+                // Wrong password
+                error.textContent = '❌ Incorrect passphrase. Please try again.';
+                input.value = '';
+                input.focus();
+            }
+        }
+
+        // Allow Enter key to submit
+        document.getElementById('password-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
+        });
+    </script>
+</body>
+</html>
+
