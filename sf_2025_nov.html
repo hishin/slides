@@ -77,6 +77,55 @@
         .content-hidden {
             display: none !important;
         }
+
+        /* Expandable list items */
+        .expandable-item:hover {
+            background: rgba(0, 0, 0, 0.02);
+            border-radius: 8px;
+            padding: 0.5rem 0.5rem 0.5rem 1.5rem !important;
+            margin-left: -0.5rem;
+        }
+
+        [data-theme="dark"] .expandable-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .expandable-content {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        [data-theme="dark"] .expandable-content {
+            background: var(--spectrum-gray-800) !important;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* HCI Detail View Styles */
+        .hci-detail-view {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .hci-detail-view button {
+            transition: all 0.2s ease;
+        }
+
+        .hci-detail-view button:hover {
+            background: var(--color-subheading) !important;
+            transform: translateX(-3px);
+        }
+
+        [data-theme="dark"] .hci-detail-view button:hover {
+            background: #9256D9 !important;
+        }
     </style>
 </head>
 <body>
@@ -124,10 +173,460 @@
         <div class="slide active" id="slide1" style="background: linear-gradient(135deg, var(--slide1-gradient-start), var(--slide1-gradient-end));">
             <h1 class="animated-title">Agentic Interactions for Video Editing</h1>
             <p class="slide-subtitle" style="color: var(--dark); margin-top: 0.5rem;">November, 2025. San Francisco</p>
-            <p class="slide-subtitle" style="color: var(--dark); margin-top: 3rem;">Mackenzie Leake, Valentina Shin</p>
+            <p class="slide-subtitle" style="color: var(--dark); margin-top: 3rem;">Valentina Shin</p>
+        </div>
+
+        <!-- Insert outline slide here -->
+        <!-- Outline Slide -->
+        <div class="slide" id="slide-outline">
+            <h2>Overview</h2>
+            <div style="max-width: 900px; margin: 3rem auto; padding: 0 2rem;">
+                <ul style="font-size: clamp(1.2rem, 2.5vh, 1.8rem); line-height: 2.5; list-style: none; padding: 0;">
+                    <li style="margin-bottom: 2rem; padding-left: 2rem; position: relative;">
+                        <span style="position: absolute; left: 0; color: var(--primary); font-weight: bold;">1.</span>
+                        <strong>HCI considerations for effective human-agent video editing</strong>
+                    </li>
+                    <li style="margin-bottom: 2rem; padding-left: 2rem; position: relative;">
+                        <span style="position: absolute; left: 0; color: var(--primary); font-weight: bold;">2.</span>
+                        <strong>Evaluation</strong>
+                    </li>
+                    <li style="margin-bottom: 2rem; padding-left: 2rem; position: relative;">
+                        <span style="position: absolute; left: 0; color: var(--primary); font-weight: bold;">3.</span>
+                        <strong>Agentic system design</strong>
+                    </li>
+                </ul>
+            </div>
+        </div>
+         
+
+        <!-- Slide 2.6: HCI Principles Summary -->
+        <div class="slide" id="slide2-6">
+            <!-- Table View -->
+            <div id="hci-table-view">
+                <h2>HCI Considerations for Effective Human–Agent Video Editing</h2>
+                <div style="max-width: 1200px; margin: 1.5rem auto; padding: 0 2rem; overflow-x: auto;">
+                    <table style="width: 70%; border-collapse: collapse; font-size: clamp(0.9rem, 1.8vh, 1.2rem); line-height: 1.5; margin: auto;">
+                        <thead>
+                            <tr style="background: var(--primary); color: white;">
+                                <th style="padding: 0.8rem; text-align: left; border: 1px solid var(--border-color); width: 25%;">Consideration</th>
+                                <th style="padding: 0.8rem; text-align: left; border: 1px solid var(--border-color); width: 50%;">Why it matters in video editing</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background: rgba(0, 0, 0, 0.02);">
+                                <td style="padding: 0.8rem; border: 1px solid var(--border-color); vertical-align: top;">
+                                    <strong>Iteration</strong>
+                                </td>
+                                <td style="padding: 0.8rem; border: 1px solid var(--border-color); vertical-align: top;">
+                                    Creative work is iterative. Agents, our algorithms, and UX must support iteration.
+                                    <br><span style="font-size: 0.85rem; color: var(--text-secondary);">[<a href="https://dl.acm.org/doi/abs/10.1145/3290605.3300233" target="_blank" style="color: var(--primary); text-decoration: none;">Amershi et al. '19</a>]</span>
+                                </td>
+                            </tr>
+                            <tr style="background: rgba(0, 0, 0, 0.02);">
+                                <td style="padding: 0.8rem; border: 1px solid var(--border-color); vertical-align: top;">
+                                    <strong>Transparency & Seamful Design</strong>
+                                </td>
+                                <td style="padding: 0.8rem; border: 1px solid var(--border-color); vertical-align: top;">
+                                    Creators need a clear mental model of what the agent can do and why it makes certain choices. Providing rationales, alternatives, and keeping track of editing decisions.
+                                    <br><span style="font-size: 0.85rem; color: var(--text-secondary);">[<a href="https://dl.acm.org/doi/abs/10.1145/1013115.1013149" target="_blank" style="color: var(--primary); text-decoration: none;">Chalmers & Galani '04</a>]</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.8rem; border: 1px solid var(--border-color); vertical-align: top;">
+                                    <strong>Abstraction & Representation</strong>
+                                </td>
+                                <td style="padding: 0.8rem; border: 1px solid var(--border-color); vertical-align: top;">
+                                    Different abstractions and representations enable creative control of multiple aspects at different levels.
+                                    <br><span style="font-size: 0.85rem; color: var(--text-secondary);">[<a href="https://arxiv.org/pdf/2503.04103" target="_blank" style="color: var(--primary); text-decoration: none;">Cao et al. '25</a>] [<a href="https://dl.acm.org/doi/10.1145/3491102.3501819" target="_blank" style="color: var(--primary); text-decoration: none;">Chung et al. '22</a>]</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.8rem; border: 1px solid var(--border-color); vertical-align: top;">
+                                    <strong>Agents in a collaborative workflow</strong>
+                                </td>
+                                <td style="padding: 0.8rem; border: 1px solid var(--border-color); vertical-align: top;">
+                                    Video editing is a collaborative activity. How do we design effective agents that enhance collaboration?
+                                    <br><span style="font-size: 0.85rem; color: var(--text-secondary);">[<a href="https://dl.acm.org/doi/pdf/10.1145/3325480.3325504" target="_blank" style="color: var(--primary); text-decoration: none;">Long et al. '19</a>] [<a href="https://dl.acm.org/doi/10.1145/3757594" target="_blank" style="color: var(--primary); text-decoration: none;">Zhang et al. '25</a>]</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3.1: Iteration Detail -->
+        <div class="slide" id="slide3-1">
+            <h2>Iteration as a first-class citizen in algorithm and UX design</h2>      
+            <p style="font-style: italic;">Our algorithms need to be designed to support iteration at multiple levels.</br>
+            We can design UX to nudge users to iterate a certain way, and signal to users affordances of the algorithm.
+            </p>        <!-- Iteration Carousel -->
+            <div style="position: relative; margin: 2rem auto; max-width: 900px;">
+                <div id="iteration-carousel" style="position: relative; min-height: 500px;">
+                    <!-- Slide 1: Direct Edit -->
+                    <div class="iteration-slide" data-slide="0" style="display: block;">
+                        <p style="color: var(--primary); font-size: clamp(1rem, 2vh, 1.5rem); font-weight: 600; margin-bottom: 1.5rem; text-align: center;">Direct low-level edit</p>
+                        <div style="text-align: center;">
+                            <img src="media/modify-outline-2-smaller.png" alt="Direct Edit" style="max-width: 60%; height: auto; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 1rem;">
+                                Design by Dave Werner
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Slide 2: Edit by Prompt -->
+                    <div class="iteration-slide" data-slide="1" style="display: none;">
+                        <p style="color: var(--primary); font-size: clamp(1rem, 2vh, 1.5rem); font-weight: 600; margin-bottom: 1.5rem; text-align: center;">Edit by prompt, high-level commands, block-based edits</p>
+                        <div style="text-align: center;">
+                            <img src="media/outline-iteration-kim-pimmel.png" alt="Edit by Prompt" style="max-width: 60%; height: auto; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 1rem;">
+                                Sketch by Kim Pimmel
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Slide 3: Edit then Generate or Immediate Preview -->
+                    <div class="iteration-slide" data-slide="2" style="display: none;">
+                        <p style="color: var(--primary); font-size: clamp(1rem, 2vh, 1.5rem); font-weight: 600; margin-bottom: 1.5rem; text-align: center;">Edit then generate or Immediate preview</p>
+                        <div style="text-align: center;">
+                            <img src="media/doki.png" alt="Edit then Generate" style="max-width: 60%; height: auto; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 1rem;">
+                                Reference: Doki
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <button onclick="event.stopPropagation(); changeIterationSlide(-1)" style="position: absolute; left: -60px; top: 50%; transform: translateY(-50%); background: var(--primary); color: white; border: none; border-radius: 50%; width: 48px; height: 48px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); transition: all 0.3s ease;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <button onclick="event.stopPropagation(); changeIterationSlide(1)" style="position: absolute; right: -60px; top: 50%; transform: translateY(-50%); background: var(--primary); color: white; border: none; border-radius: 50%; width: 48px; height: 48px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); transition: all 0.3s ease;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+
+                <!-- Slide Indicators -->
+                <div style="display: flex; justify-content: center; gap: 0.5rem; margin-top: 2rem;">
+                    <button onclick="event.stopPropagation(); goToIterationSlide(0)" class="iteration-indicator" data-index="0" style="width: 12px; height: 12px; border-radius: 50%; border: none; background: var(--primary); cursor: pointer; transition: all 0.3s ease;"></button>
+                    <button onclick="event.stopPropagation(); goToIterationSlide(1)" class="iteration-indicator" data-index="1" style="width: 12px; height: 12px; border-radius: 50%; border: none; background: rgba(20, 115, 230, 0.3); cursor: pointer; transition: all 0.3s ease;"></button>
+                    <button onclick="event.stopPropagation(); goToIterationSlide(2)" class="iteration-indicator" data-index="2" style="width: 12px; height: 12px; border-radius: 50%; border: none; background: rgba(20, 115, 230, 0.3); cursor: pointer; transition: all 0.3s ease;"></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3.2: Transparency & Seamful Design Detail -->
+        <div class="slide" id="slide3-2">
+            <h2>Opportunities for more transparent and seamful design</h2>
+            <p style="font-style: italic;">Making agent reasoning visible and leaving room for algorithm uncertainty can be helpful.</p>
+            
+            <!-- Transparency Carousel -->
+            <div style="position: relative; margin: 2rem auto; max-width: 900px;">
+                <div id="transparency-carousel" style="position: relative; min-height: 500px;">
+                    <!-- Slide 1: Alternative solutions and trade-offs -->
+                    <div class="transparency-slide" data-slide="0" style="display: block;">
+                        <p style="color: var(--primary); font-size: clamp(1rem, 2vh, 1.5rem); font-weight: 600; margin-bottom: 1.5rem; text-align: center;">Alternative solutions and trade-offs</p>
+                        <div style="text-align: center;">
+                            <img src="media/beyond-code-generation.png" alt="Alternative solutions and trade-offs" style="max-width: 60%; height: auto; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 1rem;">
+                                Reference: <a href="https://arxiv.org/pdf/2503.06911" target="_blank" style="color: var(--primary); text-decoration: none;">Beyond Code Generation: LLM-supported Exploration of the Program Design Space</a> by Pereira et al. (CHI 2025)
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Slide 2: Agent thinking can contain useful context -->
+                    <div class="transparency-slide" data-slide="1" style="display: none;">
+                        <p style="color: var(--primary); font-size: clamp(1rem, 2vh, 1.5rem); font-weight: 600; margin-bottom: 1.5rem; text-align: center;">Agent thinking can contain useful context about edit decisions</p>
+                        <div style="text-align: center;">
+                            <img src="media/memphis-rox-screenshot.png" alt="Memphis-Rox screenshot showing agent feedback" style="max-width: 75%; height: auto; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                            <div style="max-width: 700px; margin: 1.5rem auto; text-align: left; padding: 1rem; background: rgba(20, 115, 230, 0.05); border-radius: 8px;">
+                                <p style="font-size: 0.95rem; color: var(--text-primary); margin-bottom: 0.8rem;">
+                                    <strong>Source:</strong> Memphis-Rox, Community Rock Climbing Gym in Memphis
+                                </p>
+                                <p style="font-size: 0.95rem; color: var(--text-primary); margin-bottom: 0.8rem;">
+                                    <strong>User prompt:</strong> "criticize the community of Memphis for being violent and ignorant"
+                                </p>
+                                <p style="font-size: 0.95rem; color: var(--text-primary); font-style: italic;">
+                                    <strong>Feedback from Edit Duet:</strong> "...the overwhelming majority of A-roll is positive, nuanced, and focused on respect, dignity, and overcoming challenges, with many speakers explicitly rejecting negative stereotypes..."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 3: Seamful algorithm design -->
+                    <div class="transparency-slide" data-slide="2" style="display: none;">
+                        <p style="color: var(--primary); font-size: clamp(1rem, 2vh, 1.5rem); font-weight: 600; margin-bottom: 1.5rem; text-align: center;">Seamful algorithm design could give users more control</p>
+                        <div style="max-width: 700px; margin: 2rem auto; padding: 2rem; background: linear-gradient(135deg, rgba(20, 115, 230, 0.1), rgba(146, 86, 217, 0.1)); border-radius: 12px; border-left: 4px solid var(--primary);">
+                            <p style="font-size: 1.15rem; line-height: 1.7; color: var(--text-primary); font-style: italic;">
+                                "I wish there were a way to see possible subject matches that weren't pulled into the timeline due to low confidence. There were a few sound bites I knew were related, but not in the cut."
+                            </p>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 1rem; text-align: right;">
+                                — Squirrel Storybuilder user feedback
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <button onclick="event.stopPropagation(); changeTransparencySlide(-1)" style="position: absolute; left: -60px; top: 50%; transform: translateY(-50%); background: var(--primary); color: white; border: none; border-radius: 50%; width: 48px; height: 48px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); transition: all 0.3s ease;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <button onclick="event.stopPropagation(); changeTransparencySlide(1)" style="position: absolute; right: -60px; top: 50%; transform: translateY(-50%); background: var(--primary); color: white; border: none; border-radius: 50%; width: 48px; height: 48px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); transition: all 0.3s ease;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+
+                <!-- Slide Indicators -->
+                <div style="display: flex; justify-content: center; gap: 0.5rem; margin-top: 2rem;">
+                    <button onclick="event.stopPropagation(); goToTransparencySlide(0)" class="transparency-indicator" data-index="0" style="width: 12px; height: 12px; border-radius: 50%; border: none; background: var(--primary); cursor: pointer; transition: all 0.3s ease;"></button>
+                    <button onclick="event.stopPropagation(); goToTransparencySlide(1)" class="transparency-indicator" data-index="1" style="width: 12px; height: 12px; border-radius: 50%; border: none; background: rgba(20, 115, 230, 0.3); cursor: pointer; transition: all 0.3s ease;"></button>
+                    <button onclick="event.stopPropagation(); goToTransparencySlide(2)" class="transparency-indicator" data-index="2" style="width: 12px; height: 12px; border-radius: 50%; border: none; background: rgba(20, 115, 230, 0.3); cursor: pointer; transition: all 0.3s ease;"></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3.2: Abstraction Detail -->
+        <div class="slide" id="slide3-3">
+            <h2>Exploration of different abstractions and representations</h2>
+            <p style="font-style: italic;">Different abstractions of workflow and representations of media content enable creative control at different levels.</p>
+            
+            <!-- Abstraction Carousel -->
+            <div style="position: relative; margin: 2rem auto; max-width: 900px;">
+                <div id="abstraction-carousel" style="position: relative; min-height: 500px;">
+                    <!-- Slide 1: Compositional Structures -->
+                    <div class="abstraction-slide" data-slide="0" style="display: block;">
+                        <p style="color: var(--primary); font-size: clamp(1rem, 2vh, 1.5rem); font-weight: 600; margin-bottom: 1.5rem; text-align: center;">Representations based on creator workflow</p>
+                        <div style="text-align: center;">
+                            <img src="media/compositional-structure.png" alt="Compositional structures as design substrate" style="max-width: 80%; height: auto; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 1rem;">
+                                Reference: <a href="https://arxiv.org/pdf/2503.04103" target="_blank" style="color: var(--primary); text-decoration: none;">"Compositional Structures as Substrates for Human-AI Co-creation Environment"</a> by Cao et al. (CHI 2025)
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Slide 2: Narrative Structure with VidWeave -->
+                    <div class="abstraction-slide" data-slide="1" style="display: none;">
+                        <p style="color: var(--primary); font-size: clamp(1rem, 2vh, 1.5rem); font-weight: 600; margin-bottom: 1.5rem; text-align: center;">Narrative structure representation using reference videos</p>
+                        <div style="text-align: center;">
+                            <img src="media/vid-weave-plot-pattern.png" alt="VidWeave plot patterns for narrative structure" style="max-width: 80%; height: auto; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 1rem;">
+                                Reference: Ongoing intern collaboration
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Slide 3: Micro-level Edits -->
+                    <div class="abstraction-slide" data-slide="2" style="display: none;">
+                        <p style="color: var(--primary); font-size: clamp(1rem, 2vh, 1.5rem); font-weight: 600; margin-bottom: 1.5rem; text-align: center;">Supporting micro-level edits with high level metadata and controls</p>
+                        <div style="text-align: center;">
+                            <img src="media/micro-edit.png" alt="Micro-level editing interfaces" style="max-width: 80%; height: auto; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 1rem;">
+                                Reference: Ongoing intern collaboration
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Slide 4: Open Question -->
+                    <div class="abstraction-slide" data-slide="3" style="display: none;">
+                        <p style="color: var(--primary); font-size: clamp(1rem, 2vh, 1.5rem); font-weight: 600; margin-bottom: 1.5rem; text-align: center;">Open questions for exploration</p>
+                        <div style="max-width: 700px; margin: 3rem auto; text-align: center;">
+                            <p style="font-size: clamp(1rem, 2vh, 1.5rem); line-height: 1.7; color: var(--text-primary); margin-bottom: 1.5rem;">
+                                What are representations for style, pacing, character, etc?
+                            </p>
+                            <p style="font-size: clamp(1rem, 2vh, 1.5rem); line-height: 1.7; color: var(--text-primary);">
+                                What controls do we surface to users?
+                            </p>
+                            <p style="font-size: clamp(1rem, 2vh, 1.5rem); line-height: 1.7; color: var(--text-primary);">
+                                What representations are effective for agents or algorithms?
+                            </p>
+                            <p style="font-size: clamp(1rem, 2vh, 1.5rem); line-height: 1.7; color: var(--text-primary);">
+                                How do we scaffold the editing process for users?
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <button onclick="event.stopPropagation(); changeAbstractionSlide(-1)" style="position: absolute; left: -60px; top: 50%; transform: translateY(-50%); background: var(--primary); color: white; border: none; border-radius: 50%; width: 48px; height: 48px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); transition: all 0.3s ease;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <button onclick="event.stopPropagation(); changeAbstractionSlide(1)" style="position: absolute; right: -60px; top: 50%; transform: translateY(-50%); background: var(--primary); color: white; border: none; border-radius: 50%; width: 48px; height: 48px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); transition: all 0.3s ease;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+
+                <!-- Slide Indicators -->
+                <div style="display: flex; justify-content: center; gap: 0.5rem; margin-top: 2rem;">
+                    <button onclick="event.stopPropagation(); goToAbstractionSlide(0)" class="abstraction-indicator" data-index="0" style="width: 12px; height: 12px; border-radius: 50%; border: none; background: var(--primary); cursor: pointer; transition: all 0.3s ease;"></button>
+                    <button onclick="event.stopPropagation(); goToAbstractionSlide(1)" class="abstraction-indicator" data-index="1" style="width: 12px; height: 12px; border-radius: 50%; border: none; background: rgba(20, 115, 230, 0.3); cursor: pointer; transition: all 0.3s ease;"></button>
+                    <button onclick="event.stopPropagation(); goToAbstractionSlide(2)" class="abstraction-indicator" data-index="2" style="width: 12px; height: 12px; border-radius: 50%; border: none; background: rgba(20, 115, 230, 0.3); cursor: pointer; transition: all 0.3s ease;"></button>
+                    <button onclick="event.stopPropagation(); goToAbstractionSlide(3)" class="abstraction-indicator" data-index="3" style="width: 12px; height: 12px; border-radius: 50%; border: none; background: rgba(20, 115, 230, 0.3); cursor: pointer; transition: all 0.3s ease;"></button>
+                </div>
+            </div>
+        </div>
+
+        
+
+        <!-- Slide 3.4: Collaboration Detail -->
+        <div class="slide" id="slide3-4">
+            <h2>Agents in a multi-user collaborative workflow</h2>
+                <div style="max-width: 1000px; margin: 2rem auto; padding: 0 2rem;">
+                    <ul style="font-size: clamp(1.2rem, 2.4vh, 1.8rem); line-height: 1.9; padding-left: 2rem;">
+                        <li style="margin-bottom: 1.5rem;">How do we design agentic workflows that also facilitate human-human collaboration?</li>
+                        <li style="margin-bottom: 1.5rem;">How can we provide clear attribution between human edits and agent suggestions?</li>
+                        <li style="margin-bottom: 1.5rem;">What are effective shared artifacts for collaboration between humans and agents?</li>
+                    </ul>
+                </div>
+        </div>
+
+        <!-- Slide 2: Evaluation -->
+        <div class="slide" id="slide2">
+            <h2>Evaluation!</h2>
+            <p style="text-align: center; font-size: clamp(1rem, 2vh, 1.5rem); margin-top: 1rem; margin-bottom: 2rem;">
+                How can we incorporate evaluation-driven development in our work?
+            </p>
+            <div style="display: flex; justify-content: center; align-items: center; height: 55vh;">
+                <img src="media/agent_evaluation_taxonomy.png" 
+                     alt="Taxonomy of LLM Agent Evaluation" 
+                     style="max-width: 90%; max-height: 100%; cursor: pointer; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);"
+                     onclick="toggleImageZoom(this)"
+                     id="evaluation-image">
+            </div>
+            <p style="text-align: center; font-size: 0.85rem; color: var(--text-secondary); margin-top: 1rem;">
+                <em>Click image to highlight aspects we explored in AssemblyBench (2025)</em>
+            </p>
+            <p style="text-align: center; font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem;">
+                Source: <a href="https://arxiv.org/pdf/2507.21504" target="_blank" style="color: var(--primary); text-decoration: none;">Evaluation and Benchmarking of LLM Agents: A Survey</a> (M. Mohammadi et al.)
+            </p>
+        </div>
+
+        <!-- Slide 3: Extending Evaluation -->
+        <div class="slide" id="slide3">
+            <h2>Extending Evaluation</h2>
+            <div style="max-width: 1000px; margin: 2rem auto; padding: 0 2rem;">
+                <ul style="font-size: clamp(1.1rem, 2.2vh, 1.6rem); line-height: 2; list-style: none; padding: 0;">
+                    <li class="expandable-item" style="margin-bottom: 2.5rem; padding-left: 1.5rem; position: relative; cursor: pointer; transition: background 0.2s;" onclick="toggleExpandableItem(this, event)">
+                        <span style="position: absolute; left: 0; color: var(--primary);">▸</span>
+                        <div class="item-content">
+                            <strong>Agent-as-a-Judge</strong> to evaluate entire task solving process — extends idea in Critic agent of EditDuet and LLM-as-a-judge
+                            <br>
+                            <span style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem; display: inline-block;">
+                                <a href="https://arxiv.org/pdf/2410.10934" target="_blank" style="color: var(--primary); text-decoration: none;" onclick="event.stopPropagation();">
+                                    Agent-as-a-Judge: Evaluate Agents with Agents
+                                </a> (Zhuge et al., 2024)
+                            </span>
+                        </div>
+                        <div class="expandable-content" style="display: none; margin-top: 1rem; padding: 1rem; background: var(--spectrum-gray-100); border-radius: 8px;">
+                            <img src="media/agents-as-judge.png" alt="Agent-as-a-Judge diagram" style="max-width: 100%; height: auto; border-radius: 4px;">
+                        </div>
+                    </li>
+                    <li class="expandable-item" style="margin-bottom: 2.5rem; padding-left: 1.5rem; position: relative; cursor: pointer; transition: background 0.2s;" onclick="toggleExpandableItem(this, event)">
+                        <span style="position: absolute; left: 0; color: var(--primary);">▸</span>
+                        <div class="item-content">
+                            <strong>Generative Agents:</strong> Simulating users with agents for more comprehensive evaluation
+                            <br>
+                            <span style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem; display: inline-block;">
+                                <a href="https://arxiv.org/abs/2304.03442" target="_blank" style="color: var(--primary); text-decoration: none;" onclick="event.stopPropagation();">
+                                    Generative Agents: Interactive Simulacra of Human Behavior
+                                </a> (Park et al., 2023)
+                            </span>
+                        </div>
+                    </li>
+                    <li class="expandable-item" style="padding-left: 1.5rem; position: relative; cursor: pointer; transition: background 0.2s;" onclick="toggleExpandableItem(this, event)">
+                        <span style="position: absolute; left: 0; color: var(--primary);">▸</span>
+                        <div class="item-content">
+                            <strong>Human-in-the-Loop:</strong> Visualizations that help human judges assess video quality
+                            <br>
+                            <span style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem; display: inline-block;">
+                                <a href="https://minahuh.com/assets/pdf/VideoDiff_CamReady.pdf" target="_blank" style="color: var(--primary); text-decoration: none;" onclick="event.stopPropagation();">
+                                    VideoDiff: Visualizing Video Differences
+                                </a> (Huh et al., 2023)
+                            </span>
+                        </div>
+                        <div class="expandable-content" style="display: none; margin-top: 1rem; padding: 1rem; background: var(--spectrum-gray-100); border-radius: 8px;">
+                            <img src="media/video-diff.png" alt="VideoDiff visualization" style="max-width: 100%; height: auto; border-radius: 4px;">
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </div>
 
         <!-- Add more slides here -->
+
+        <!-- Slide 4: Tool Modularity & User Mental Models -->
+        <div class="slide" id="slide4">
+            <h2>Agentic System Design Considerations</h2>
+            <div style="max-width: 1000px; margin: 2rem auto; padding: 0 2rem;">
+                <ul style="font-size: clamp(1.1rem, 2.2vh, 1.6rem); line-height: 2; list-style: none; padding: 0;">
+                    <li style="margin-bottom: 2.5rem; padding-left: 1.5rem; position: relative;">
+                        <span style="position: absolute; left: 0; color: var(--primary);">▸</span>
+                        <div>
+                            <strong>Flexibility vs. Predictability</strong>
+                        </div>
+                    </li>
+                    <li style="margin-bottom: 2.5rem; padding-left: 1.5rem; position: relative;">
+                        <span style="position: absolute; left: 0; color: var(--primary);">▸</span>
+                        <div>
+                            <strong>Small and Large Models</strong> 
+                            <br>
+                            <span style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem; display: inline-block;">
+                                <a href="https://arxiv.org/pdf/2506.02153" target="_blank" style="color: var(--primary); text-decoration: none;">
+                                    Small language models are the future of agentic AI
+                                </a> (Belcak et al., 2025)
+                            </span>
+                        </div>
+                    </li>
+                    <li style="padding-left: 1.5rem; position: relative;">
+                        <span style="position: absolute; left: 0; color: var(--primary);">▸</span>
+                        <div>
+                            <strong>Just-in-Time or Dynamic Tools and Agents</strong> 
+                            <br>
+                            <span style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem; display: inline-block;">
+                                <a href="https://arxiv.org/pdf/2510.14591" target="_blank" style="color: var(--primary); text-decoration: none;">
+                                    Just-In-Time Objectives: A General Approach for Specialized AI Interactions
+                                </a> (Lam et al., 2025)
+                            </span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 5: Summary -->
+        <div class="slide" id="slide-summary">
+            <h2>Summary</h2>
+            <div style="max-width: 900px; margin: 2.5rem auto; padding: 0 2rem;">
+                <ul style="font-size: clamp(1.2rem, 2.4vh, 1.8rem); line-height: 2; list-style: none; padding: 0;">
+                    <li style="margin-bottom: 1.8rem; padding-left: 1.5rem; position: relative;">
+                        <span style="position: absolute; left: 0; color: var(--primary);">▸</span>
+                        <div>
+                            A focus on HCI to make our systems iterative, transparent, and collaborative.
+                        </div>
+                    </li>
+                    <li style="margin-bottom: 1.8rem; padding-left: 1.5rem; position: relative;">
+                        <span style="position: absolute; left: 0; color: var(--primary);">▸</span>
+                        <div>
+                            A rigorous approach to evaluation to demonstrate capabilities and limitations.
+                        </div>
+                    </li>
+                    <li style="padding-left: 1.5rem; position: relative;">
+                        <span style="position: absolute; left: 0; color: var(--primary);">▸</span>
+                        <div>
+                            An experimental approach to how we design agentic systems.
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
 
     </div>
 
@@ -231,6 +730,22 @@
 
         // Keyboard navigation
         document.addEventListener('keydown', (e) => {
+            // Check if we're on the iteration carousel slide
+            const currentSlideEl = document.querySelector('.slide.active');
+            const isOnCarouselSlide = currentSlideEl && currentSlideEl.id === 'slide3-1';
+            
+            // If on carousel slide and using left/right arrows, control the carousel instead
+            if (isOnCarouselSlide && e.key === 'ArrowRight') {
+                e.preventDefault();
+                changeIterationSlide(1);
+                return;
+            } else if (isOnCarouselSlide && e.key === 'ArrowLeft') {
+                e.preventDefault();
+                changeIterationSlide(-1);
+                return;
+            }
+            
+            // Normal slide navigation
             if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'ArrowDown') {
                 e.preventDefault();
                 nextSlide();
@@ -368,6 +883,161 @@
                 checkPassword();
             }
         });
+
+        // ============================================
+        // Image Toggle Functionality
+        // ============================================
+        function toggleImageZoom(img) {
+            const originalSrc = 'media/agent_evaluation_taxonomy.png';
+            const assemblybenchSrc = 'media/agent_evaluation_taxonomy-assemblybench.png';
+            
+            if (img.src.includes('assemblybench')) {
+                // Switch back to original
+                img.src = originalSrc;
+            } else {
+                // Switch to assemblybench version
+                img.src = assemblybenchSrc;
+            }
+        }
+
+        // ============================================
+        // Expandable List Items
+        // ============================================
+        function toggleExpandableItem(item, event) {
+            // Don't expand if clicking on a link
+            if (event.target.tagName === 'A') {
+                return;
+            }
+            
+            const expandableContent = item.querySelector('.expandable-content');
+            const arrow = item.querySelector('span:first-child');
+            
+            if (expandableContent) {
+                const isExpanded = expandableContent.style.display !== 'none';
+                
+                if (isExpanded) {
+                    // Collapse
+                    expandableContent.style.display = 'none';
+                    arrow.textContent = '▸';
+                } else {
+                    // Expand
+                    expandableContent.style.display = 'block';
+                    arrow.textContent = '▾';
+                }
+            }
+        }
+
+        // ============================================
+        // Iteration Carousel Functions
+        // ============================================
+        let currentIterationSlide = 0;
+
+        function changeIterationSlide(direction) {
+            const slides = document.querySelectorAll('.iteration-slide');
+            const indicators = document.querySelectorAll('.iteration-indicator');
+            
+            // Hide current slide
+            slides[currentIterationSlide].style.display = 'none';
+            indicators[currentIterationSlide].style.background = 'rgba(20, 115, 230, 0.3)';
+            
+            // Calculate new slide index
+            currentIterationSlide = (currentIterationSlide + direction + slides.length) % slides.length;
+            
+            // Show new slide
+            slides[currentIterationSlide].style.display = 'block';
+            indicators[currentIterationSlide].style.background = 'var(--primary)';
+        }
+
+        function goToIterationSlide(index) {
+            const slides = document.querySelectorAll('.iteration-slide');
+            const indicators = document.querySelectorAll('.iteration-indicator');
+            
+            // Hide current slide
+            slides[currentIterationSlide].style.display = 'none';
+            indicators[currentIterationSlide].style.background = 'rgba(20, 115, 230, 0.3)';
+            
+            // Set new slide index
+            currentIterationSlide = index;
+            
+            // Show new slide
+            slides[currentIterationSlide].style.display = 'block';
+            indicators[currentIterationSlide].style.background = 'var(--primary)';
+        }
+
+        // ============================================
+        // Transparency Carousel Functions
+        // ============================================
+        let currentTransparencySlide = 0;
+
+        function changeTransparencySlide(direction) {
+            const slides = document.querySelectorAll('.transparency-slide');
+            const indicators = document.querySelectorAll('.transparency-indicator');
+            
+            // Hide current slide
+            slides[currentTransparencySlide].style.display = 'none';
+            indicators[currentTransparencySlide].style.background = 'rgba(20, 115, 230, 0.3)';
+            
+            // Calculate new slide index
+            currentTransparencySlide = (currentTransparencySlide + direction + slides.length) % slides.length;
+            
+            // Show new slide
+            slides[currentTransparencySlide].style.display = 'block';
+            indicators[currentTransparencySlide].style.background = 'var(--primary)';
+        }
+
+        function goToTransparencySlide(index) {
+            const slides = document.querySelectorAll('.transparency-slide');
+            const indicators = document.querySelectorAll('.transparency-indicator');
+            
+            // Hide current slide
+            slides[currentTransparencySlide].style.display = 'none';
+            indicators[currentTransparencySlide].style.background = 'rgba(20, 115, 230, 0.3)';
+            
+            // Set new slide index
+            currentTransparencySlide = index;
+            
+            // Show new slide
+            slides[currentTransparencySlide].style.display = 'block';
+            indicators[currentTransparencySlide].style.background = 'var(--primary)';
+        }
+
+        // ============================================
+        // Abstraction Carousel Functions
+        // ============================================
+        let currentAbstractionSlide = 0;
+
+        function changeAbstractionSlide(direction) {
+            const slides = document.querySelectorAll('.abstraction-slide');
+            const indicators = document.querySelectorAll('.abstraction-indicator');
+            
+            // Hide current slide
+            slides[currentAbstractionSlide].style.display = 'none';
+            indicators[currentAbstractionSlide].style.background = 'rgba(20, 115, 230, 0.3)';
+            
+            // Calculate new slide index
+            currentAbstractionSlide = (currentAbstractionSlide + direction + slides.length) % slides.length;
+            
+            // Show new slide
+            slides[currentAbstractionSlide].style.display = 'block';
+            indicators[currentAbstractionSlide].style.background = 'var(--primary)';
+        }
+
+        function goToAbstractionSlide(index) {
+            const slides = document.querySelectorAll('.abstraction-slide');
+            const indicators = document.querySelectorAll('.abstraction-indicator');
+            
+            // Hide current slide
+            slides[currentAbstractionSlide].style.display = 'none';
+            indicators[currentAbstractionSlide].style.background = 'rgba(20, 115, 230, 0.3)';
+            
+            // Set new slide index
+            currentAbstractionSlide = index;
+            
+            // Show new slide
+            slides[currentAbstractionSlide].style.display = 'block';
+            indicators[currentAbstractionSlide].style.background = 'var(--primary)';
+        }
+
     </script>
 </body>
 </html>

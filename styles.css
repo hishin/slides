@@ -208,9 +208,9 @@ body, html {
     margin: 0 auto;
 }
 
-/* Spectrum-inspired typography hierarchy */
+/* Spectrum-inspired typography hierarchy - now responsive to viewport height */
 h1 {
-    font-size: var(--spectrum-font-size-1300);
+    font-size: clamp(3rem, 6vh, 5rem);
     font-weight: 500;
     margin-bottom: var(--spectrum-spacing-600);
     color: var(--primary);
@@ -218,7 +218,7 @@ h1 {
 }
 
 h2 {
-    font-size: var(--spectrum-font-size-1100);
+    font-size: clamp(2.5rem, 5vh, 4rem);
     font-weight: 500;
     margin-bottom: var(--spectrum-spacing-500);
     color: var(--primary);
@@ -226,21 +226,21 @@ h2 {
 }
 
 h3 {
-    font-size: var(--spectrum-font-size-800);
+    font-size: clamp(1.8rem, 3.5vh, 2.8rem);
     font-weight: 500;
     margin-bottom: var(--spectrum-spacing-400);
     color: var(--color-subheading);
 }
 
 h4 {
-    font-size: var(--spectrum-font-size-600);
+    font-size: clamp(1.5rem, 3vh, 2.2rem);
     font-weight: 500;
     margin-bottom: var(--spectrum-spacing-300);
     color: var(--color-subheading);
 }
 
 p {
-    font-size: var(--spectrum-font-size-400);
+    font-size: clamp(1.1rem, 2.2vh, 1.8rem);
     margin-bottom: var(--spectrum-spacing-400);
     line-height: 1.6;
     color: var(--text);
@@ -493,7 +493,7 @@ em {
 
 /* Added classes for previously inline styles */
 .slide-subtitle {
-    font-size: var(--spectrum-font-size-500);
+    font-size: clamp(1.2rem, 2.4vh, 1.8rem);
     margin-bottom: 1rem;
 }
 
@@ -608,13 +608,13 @@ em {
 
 @media (max-width: 768px) {
     h1 {
-        font-size: 3rem;
+        font-size: clamp(2.5rem, 5vh, 4rem);
     }
     h2 {
-        font-size: 2.5rem;
+        font-size: clamp(2rem, 4vh, 3.5rem);
     }
     p {
-        font-size: 1.4rem;
+        font-size: clamp(1rem, 2vh, 1.6rem);
     }
     .card-container {
         flex-direction: column;
