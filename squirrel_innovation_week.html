@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storybuilder++ | Iterative Editing</title>
+    <link rel="stylesheet" href="https://use.typekit.net/mqk3dyg.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #1473E6;
+            --dark-blue: #0D66D0;
+            --light-blue: #e0f2ff;
+            --accent-purple: #9256D9;
+            --gray-900: #1A1A1A;
+            --gray-800: #2C2C2C;
+            --gray-700: #464646;
+            --gray-100: #F5F5F5;
+            --white: #FFFFFF;
+        }
+
+        body {
+            font-family: "urw-form", sans-serif;
+            color: var(--gray-900);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Password Protection */
+        body.locked {
+            overflow: hidden;
+        }
+
+        body.locked > *:not(.password-overlay) {
+            display: none;
+        }
+
+        .password-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-blue), var(--accent-purple));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .password-box {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .password-box h2 {
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .password-box input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--gray-100);
+            border-radius: 6px;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            font-family: "urw-form", sans-serif;
+            transition: border-color 0.3s;
+        }
+
+        .password-box input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        .password-box button {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-family: "urw-form", sans-serif;
+        }
+
+        .password-box button:hover {
+            background: var(--dark-blue);
+        }
+
+        .password-error {
+            color: #d32f2f;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .password-error.show {
+            display: block;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-blue), var(--accent-purple));
+            color: var(--white);
+            padding: 120px 40px 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="2" fill="white" opacity="0.1"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .hero .tagline {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .hero .subtitle {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Feature Section */
+        .feature-section {
+            padding: 100px 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .feature-section:nth-child(even) {
+            background-color: var(--gray-100);
+        }
+
+        .feature-content {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+            margin-bottom: 40px;
+        }
+
+        .feature-section:nth-child(odd) .feature-content {
+            flex-direction: row;
+        }
+
+        .feature-section:nth-child(even) .feature-content {
+            flex-direction: row-reverse;
+        }
+
+        .feature-text {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .feature-text h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .feature-text p {
+            font-size: clamp(1.1rem, 2vw, 1.4rem);
+            color: var(--gray-700);
+            line-height: 1.8;
+        }
+
+        .feature-image {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .feature-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-image img:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-blue), var(--accent-purple));
+            color: white;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--gray-900), var(--gray-800));
+            color: var(--white);
+            padding: 100px 40px;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .cta-section p {
+            font-size: clamp(1.2rem, 3vw, 1.6rem);
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 18px 48px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(20, 115, 230, 0.4);
+        }
+
+        .cta-button:hover {
+            background-color: var(--dark-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(20, 115, 230, 0.6);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .feature-content {
+                flex-direction: column !important;
+            }
+
+            .hero {
+                padding: 80px 20px 60px;
+            }
+
+            .feature-section {
+                padding: 60px 20px;
+            }
+        }
+
+        /* Scroll Animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Number badges */
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--accent-purple));
+            color: white;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-right: 15px;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Password Protection Overlay -->
+    <div class="password-overlay" id="password-overlay">
+        <div class="password-box">
+            <h2>🔒 Protected Content</h2>
+            <p>Please enter the password to view this presentation</p>
+            <input type="password" id="password-input" placeholder="Enter password" autocomplete="off" />
+            <button onclick="checkPassword()">Submit</button>
+            <div class="password-error" id="password-error"></div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="badge">Squirrel Innovation Week 2025</div>
+            <h1>Storybuilder++</h1>
+            <p class="tagline">Iterative Editing for Creative Control</p>
+            <p class="subtitle">Transform your video editing workflow with powerful iterative tools that put you in control of every detail.</p>
+        </div>
+    </section>
+
+    <!-- Current Workflow -->
+    <section class="feature-section fade-in">
+        <div class="feature-content">
+            <div class="feature-text">
+                <span class="step-number">1</span>
+                <h2>Today's Workflow</h2>
+                <p>Current video creation starts with uploading media and describing your vision with a single prompt. While powerful, it's a one-shot process that can feel like a black box.</p>
+            </div>
+            <div class="feature-image">
+                <img src="media/innovation_week/12.png" alt="Current Workflow">
+            </div>
+        </div>
+    </section>
+
+    <!-- Edit Outline -->
+    <section class="feature-section fade-in">
+        <div class="feature-content">
+            <div class="feature-text">
+                <span class="step-number">2</span>
+                <h2>Edit Your Outline</h2>
+                <p>Take control with an editable outline view. Review the AI-generated structure and make changes before rendering. See exactly what's planned for your video.</p>
+            </div>
+            <div class="feature-image">
+                <img src="media/innovation_week/edit-outline.jpg" alt="Edit Outline Feature">
+            </div>
+        </div>
+    </section>
+
+    <!-- Block-based Editing -->
+    <section class="feature-section fade-in">
+        <div class="feature-content">
+            <div class="feature-text">
+                <span class="step-number">3</span>
+                <h2>Enhanced Outline Editing</h2>
+                <p>Drag and drop sections to reorder your story. Click into any section to edit its content, timing, and media. The power of modular editing meets AI assistance.</p>
+            </div>
+            <div class="feature-image">
+                <img src="media/innovation_week/Gemini_Generated_Image_819jz0819jz0819j.jpeg" alt="Block-based Re-ordering">
+            </div>
+        </div>
+    </section>
+
+    <!-- Special Commands -->
+    <section class="feature-section fade-in">
+        <div class="feature-content">
+            <div class="feature-text">
+                <span class="step-number">4</span>
+                <h2>Special Commands</h2>
+                <p>Add polish with dedicated tools for b-roll, titles, and transitions. Professional touches are just a click away, perfectly integrated into your workflow.</p>
+            </div>
+            <div class="feature-image">
+                <img src="media/innovation_week/Gemini_Generated_Image_5se6xz5se6xz5se6.jpeg" alt="Special Commands">
+            </div>
+        </div>
+    </section>
+
+    <!-- Natural Language -->
+    <section class="feature-section fade-in">
+        <div class="feature-content">
+            <div class="feature-text">
+                <span class="step-number">5</span>
+                <h2>Natural Language Prompting</h2>
+                <p>Use everyday language to refine your edit. "Make it more upbeat", "Add a dramatic pause", "Emphasize the product shot" - the AI understands and iterates.</p>
+            </div>
+            <div class="feature-image">
+                <img src="media/innovation_week/Gemini_Generated_Image_jnztxnjnztxnjnzt.jpeg" alt="Natural Language Prompting">
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <h2>The Future of Video Editing</h2>
+        <p>Combining AI power with human creativity. Iterative, intuitive, and infinitely flexible.</p>
+        <a href="#" class="cta-button">Learn More</a>
+    </section>
+
+    <script>
+        // Scroll animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // ============================================
+        // Password Protection
+        // ============================================
+        const CORRECT_PASSWORD = "innovation";
+
+        // Check if already authenticated in this session
+        if (sessionStorage.getItem('authenticated') === 'true') {
+            document.getElementById('password-overlay').style.display = 'none';
+        } else {
+            document.body.classList.add('locked');
+            document.getElementById('password-input').focus();
+        }
+
+        function checkPassword() {
+            const input = document.getElementById('password-input');
+            const error = document.getElementById('password-error');
+            
+            if (input.value === CORRECT_PASSWORD) {
+                // Correct password
+                sessionStorage.setItem('authenticated', 'true');
+                document.getElementById('password-overlay').style.display = 'none';
+                document.body.classList.remove('locked');
+                error.classList.remove('show');
+            } else {
+                // Wrong password
+                error.textContent = '❌ Incorrect password. Please try again.';
+                error.classList.add('show');
+                input.value = '';
+                input.focus();
+            }
+        }
+
+        // Allow Enter key to submit
+        document.getElementById('password-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
+        });
+    </script>
+</body>
+</html>
+
